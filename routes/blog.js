@@ -1,9 +1,11 @@
-// routes/blog.js
 const { Router } = require('express');
 const multer = require('multer');
 const path = require('path');
+const crypto = require('crypto');
 const Blog = require('../models/Blog');
-const { checkForAuthenticationCookie } = require("../middlewares/authentication");
+const { verifyOTP } = require('../middlewares/otpVerification');
+const { checkForAuthenticationCookie } = require('../middlewares/authentication');
+
 
 const router = Router();
 
@@ -19,38 +21,63 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.get('/add-new', checkForAuthenticationCookie('token'), (req, res) => {
-    return res.render('addblog', {
-        user: req.user,
-    });
-});
-
 router.get('/:id', checkForAuthenticationCookie('token'), async (req, res) => {
-    const blog = await Blog.findById(req.params.id);
-    return res.render('blog', {
-        user: req.user,
-        blog,
-    });
+    const { id } = req.params;
+
+    if (id === 'add-new') {
+        return res.render('addblog', {
+            user: req.user,
+        });
+    } else {
+        try {
+            const blog = await Blog.findById(id);
+            if (!blog) {
+                return res.status(404).send('Blog not found');
+            }
+            return res.render('blog', {
+                user: req.user,
+                blog,
+            });
+        } catch (error) {
+            console.error('Error fetching blog:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+    }
 });
 
 router.get('/download/:id', checkForAuthenticationCookie('token'), async (req, res) => {
+    const { id } = req.params;
     const uuid = crypto.randomUUID();
-    console.log(uuid);
-    const blog = await Blog.findById(req.params.id);
-    res.render('downloading', { uuid: uuid, blog: blog });
+    try {
+        const blog = await Blog.findById(id);
+        if (!blog) {
+            return res.status(404).send('Blog not found');
+        }
+        res.render('downloading', {
+            blog,
+            uuid: uuid,
+            id: id
+        });
+    } catch (error) {
+        console.error('Error fetching blog:', error);
+        return res.status(500).send('Internal Server Error');
+    }
 });
 
 router.post('/', checkForAuthenticationCookie('token'), upload.single('coverImage'), async (req, res) => {
-    const { title } = req.body;
-    const blog = await Blog.create({
-        title,
-        createdBy: req.user._id,
-        coverImageURL: `uploads/${req.file.filename}`,
-    });
+    try {
+        const { title } = req.body;
+        const blog = await Blog.create({
+            title,
+            createdBy: req.user._id,
+            coverImageURL: `uploads/${req.file.filename}`,
+        });
 
-    console.log(req.body);
-    console.log(req.file);
-    return res.redirect(`/blog/${blog._id}`);
+        return res.redirect(`/blog/${blog._id}`);
+    } catch (error) {
+        console.error('Error creating blog:', error);
+        return res.status(500).send('Internal Server Error');
+    }
 });
 
 module.exports = router;
