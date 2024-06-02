@@ -1,7 +1,9 @@
+// routes/blog.js
 const { Router } = require('express');
 const multer = require('multer');
 const path = require('path');
 const Blog = require('../models/Blog');
+const { checkForAuthenticationCookie } = require("../middlewares/authentication");
 
 const router = Router();
 
@@ -17,35 +19,28 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.get('/:id', async (req, resp) => {
+router.get('/add-new', checkForAuthenticationCookie('token'), (req, res) => {
+    return res.render('addblog', {
+        user: req.user,
+    });
+});
+
+router.get('/:id', checkForAuthenticationCookie('token'), async (req, res) => {
     const blog = await Blog.findById(req.params.id);
-    return resp.render('blog', {
+    return res.render('blog', {
         user: req.user,
         blog,
     });
 });
-router.get('/download/:id', async (req, resp) => {
-  const blog = await Blog.findById(req.params.id);
-  if (!blog || !blog.coverImageURL) {
-      return resp.status(404).send('Image not found');
-  }
-  
-  const imagePath = path.resolve(`./public/${blog.coverImageURL}`);
-  resp.download(imagePath, err => {
-      if (err) {
-          console.error('Error downloading file:', err);
-          resp.status(500).send('Error downloading file');
-      }
-  });
+
+router.get('/download/:id', checkForAuthenticationCookie('token'), async (req, res) => {
+    const uuid = crypto.randomUUID();
+    console.log(uuid);
+    const blog = await Blog.findById(req.params.id);
+    res.render('downloading', { uuid: uuid, blog: blog });
 });
 
-router.get('/add-new', (req, resp) => {
-    return resp.render('addblog', {
-        user: req.user,
-    });
-});
-
-router.post('/', upload.single('coverImage'), async (req, resp) => {
+router.post('/', checkForAuthenticationCookie('token'), upload.single('coverImage'), async (req, res) => {
     const { title } = req.body;
     const blog = await Blog.create({
         title,
@@ -55,7 +50,7 @@ router.post('/', upload.single('coverImage'), async (req, resp) => {
 
     console.log(req.body);
     console.log(req.file);
-    return resp.redirect(`/blog/${blog._id}`);
+    return res.redirect(`/blog/${blog._id}`);
 });
 
 module.exports = router;

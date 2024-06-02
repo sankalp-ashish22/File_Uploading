@@ -1,7 +1,8 @@
+// index.js
 const path = require("path");
 const express = require('express');
 const mongoose = require("mongoose");
-const cookiePaser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 const userRoute = require('./routes/user');
 const blogRoute = require("./routes/blog");
 const { checkForAuthenticationCookie } = require("./middlewares/authentication");
@@ -9,7 +10,7 @@ const { checkForAuthenticationCookie } = require("./middlewares/authentication")
 const app = express();
 const PORT = 8000;
 
-const Blog = require('./models/Blog')
+const Blog = require('./models/Blog');
 
 mongoose.connect('mongodb://localhost:27017/FileUpload', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("MongoDB Connected"))
@@ -22,19 +23,23 @@ app.set('view engine', 'ejs');
 app.set('views', path.resolve("./views"));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: false }));
-app.use(cookiePaser());
-app.use(checkForAuthenticationCookie('token'));
-app.use(express.static(path.resolve("./public")))
-app.get('/', async (req, resp) => {
+app.use(cookieParser());
+app.use(express.json());
+
+// Use the authentication check for all routes except those for signing in or signing up
+app.use('/user', userRoute);
+app.use('/blog', blogRoute);
+
+app.get('/', checkForAuthenticationCookie('token'), async (req, res) => {
     const allBlogs = await Blog.find({});
-    resp.render("home",{
+    res.render("home", {
         user: req.user,
         blogs: allBlogs,
     });
 });
 
-app.use("/user", userRoute);
-app.use("/blog",blogRoute);
+app.use(checkForAuthenticationCookie('token'));
+
 app.listen(PORT, () => {
     console.log(`Server Started at PORT: ${PORT}`);
 });
