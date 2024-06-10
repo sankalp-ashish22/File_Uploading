@@ -3,52 +3,40 @@
 
 <head>
   <link rel="stylesheet" href="/css/style.css">
-  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Signup</title>
 </head>
 
 <body>
-
-
   <section class="container">
     <div class="login-container">
-        <div class="circle circle-one"></div>
-        <div class="form-container">
-            <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png" alt="illustration" class="illustration" />
-            <h1 class="opacity">CREATE ACCOUNT</h1>
-            <form action="/user/signup" method="post">
-            
-              <div class="mt-2">
-                <div class="mb-3">
-               
-                  <input type="text" id="fullName" name="fullName" aria-describedby="fullName" placeholder="Name" />
-                </div>
-                <div class="mb-3">
-                 
-                  <input type="email" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email" />
-                </div>
-                <div class="mb-3">
-           
-                  <input type="password" name="password" id="exampleInputPassword1" placeholder="Password" />
-                </div>
-      
-                <button type="submit" class="btn btn-primary">Sign Up</button>
-              </div>
-            </form>
-            <div class="register-forget opacity">
-                <a href="/user/signin">SIGN IN</a>
-                <a href="">FORGOT PASSWORD</a>
+      <div class="circle circle-one"></div>
+      <div class="form-container">
+        <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png" alt="illustration" class="illustration" />
+        <h1 class="opacity1">Create Account</h1>
+        <form action="/user/signup" method="post">
+          <div class="mt-2">
+            <div class="mb-3">
+              <input type="text" id="fullName" name="fullName" aria-describedby="fullName" placeholder="Name" />
             </div>
+            <div class="mb-3">
+              <input type="email" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email" />
+            </div>
+            <div class="mb-3">
+              <input type="password" name="password" id="exampleInputPassword1" placeholder="Password" />
+            </div>
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+          </div>
+        </form>
+        <div class="register-forget opacity">
+          <a href="/user/signin">SIGN IN</a>
+          <a href="">FORGOT PASSWORD</a>
         </div>
-        <div class="circle circle-two"></div>
+      </div>
+      <div class="circle circle-two"></div>
     </div>
-    <!-- <div class="theme-btn-container"></div> -->
-</section>
-     
-    
+  </section>
   <script src="/js/script.js"></script>
 </body>
 
