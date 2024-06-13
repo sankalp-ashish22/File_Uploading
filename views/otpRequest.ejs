@@ -4,14 +4,170 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request OTP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(to bottom, rgba(192, 192, 192, 0.3) 0%, rgba(192, 192, 192, 0.3) 20%, rgba(255, 255, 255, 0.8) 20%, rgba(255, 255, 255, 0.8) 40%, rgba(192, 192, 192, 0.3) 40%, rgba(192, 192, 192, 0.3) 60%, rgba(255, 255, 255, 0.8) 60%, rgba(255, 255, 255, 0.8) 80%, rgba(192, 192, 192, 0.3) 80%, rgba(192, 192, 192, 0.3) 100%);
+            position: relative;
+            background-image: url("https://wallpaperaccess.com/full/2500206.jpg");
+            background-size: cover;
+        }
+
+        .container {
+            background-color: rgba(12, 12, 12, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        label {
+            margin: 10px 0 5px 0;
+            width: 100%;
+            text-align: left;
+            color: white;
+        }
+
+        #email {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #3da306;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            button {
+                width: 100%;
+            }
+        }
+
+        /* Colorful Dancing Balls Background */
+        .ball-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ball {
+            border-radius: 50%;
+            animation: dance 15s infinite alternate;
+            position: absolute;
+        }
+
+        @keyframes dance {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(100vw, 100vh);
+            }
+        }
+
+        /* Generate multiple colorful balls */
+        .ball:nth-child(1) {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 0, 0, 0.7); /* Red */
+            animation-duration: 20s;
+        }
+
+        .ball:nth-child(2) {
+            width: 70px;
+            height: 70px;
+            background-color: rgba(0, 255, 0, 0.7); /* Green */
+            animation-duration: 25s;
+            animation-delay: -5s;
+        }
+
+        .ball:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(0, 0, 255, 0.7); /* Blue */
+            animation-duration: 18s;
+            animation-delay: -10s;
+        }
+
+        .ball:nth-child(4) {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 0, 0.7); /* Yellow */
+            animation-duration: 22s;
+            animation-delay: -7s;
+        }
+
+        .ball:nth-child(5) {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 0, 255, 0.7); /* Magenta */
+            animation-duration: 19s;
+            animation-delay: -3s;
+        }
+        h1{
+            color:#ffff;
+            font-size: larger;
+            
+        }
+    </style>
 </head>
 <body>
-    <h1>Request OTP</h1>
-    <form action="/otp/generate?uuid=<%=uuid%>" method="post">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <input type="hidden" name="blogId" value="<%= blogId %>">
-        <button type="submit">Request OTP</button>
-    </form>
+    <div class="container">
+        <h1>Request OTP</h1>
+        <form action="/otp/generate?uuid=<%=uuid%>" method="post">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <input type="hidden" name="blogId" value="<%= blogId %>">
+            <button type="submit">Request OTP</button>
+        </form>
+    </div>
+
+    <!-- Colorful Dancing Balls Background -->
+    <div class="ball-container">
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+    </div>
 </body>
 </html>

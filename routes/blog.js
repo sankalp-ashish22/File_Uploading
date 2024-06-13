@@ -6,7 +6,6 @@ const Blog = require('../models/Blog');
 const { verifyOTP } = require('../middlewares/otpVerification');
 const { checkForAuthenticationCookie } = require('../middlewares/authentication');
 
-
 const router = Router();
 
 const storage = multer.diskStorage({
