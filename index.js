@@ -7,7 +7,7 @@ const userRoute = require('./routes/user');
 const blogRoute = require("./routes/blog");
 const otpRoute = require("./routes/otp");
 const { checkForAuthenticationCookie } = require("./middlewares/authentication");
-
+const client = require("./client")
 const app = express();
 const PORT = 8000;
 
@@ -20,6 +20,8 @@ mongoose.connect('mongodb://localhost:27017/FileUpload')
         console.error("MongoDB connection error:", error);
         process.exit(1); // Exit process with failure
     });
+
+
 
 // Middleware and view engine setup
 app.set('view engine', 'ejs');
