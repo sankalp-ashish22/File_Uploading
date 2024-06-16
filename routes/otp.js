@@ -12,7 +12,6 @@ require('dotenv').config();
 const router = Router();
 
 async function otpgenerator(email, blogId, uuid, res) {
- 
     const otp = crypto.randomInt(100000, 999999).toString();
     await Otp.create({ email, otp });
 
@@ -52,15 +51,13 @@ function getHashKey(search_mail) {
 }
 
 router.get('/request', (req, res) => {
-    const { blogId, uuid } = req.query;
-    console.log(req.query);
-    res.render('otpRequest', { blogId, uuid });
+    const { blogId, uuid, errorMessage } = req.query;
+    res.render('otpRequest', { blogId, uuid, errorMessage: errorMessage || null });
 });
 
 router.post('/generate', async (req, res) => {
     const { email, blogId } = req.body;
     const { uuid } = req.query;
-    console.log(uuid);
     const checkRedis = await find_in_redis(email);
     if (checkRedis) {
         console.log("Cache Hit");
@@ -68,21 +65,30 @@ router.post('/generate', async (req, res) => {
     }
     const user = await User.findOne({ email });
     if (!user) {
-        return res.status(400).send('Email not found');
+        const errorMessage = 'Email not found';
+        return res.redirect(`/otp/request?blogId=${blogId}&uuid=${uuid}&errorMessage=${errorMessage}`);
     }
     console.log("Cache Miss");
     const key = getHashKey(email);
-    await client.set(key, JSON.stringify(user), 'EX', 300); // Store in the cached memory for 300 seconds afer that it will expired
+    await client.set(key, JSON.stringify(user), 'EX', 3600); // Store in the cached memory for 300 seconds after that it will expire
     otpgenerator(email, blogId, uuid, res);
 });
 
 router.get('/verify', (req, res) => {
-    const { blogId, uuid } = req.query;
-    res.render('otpVerify', { blogId, uuid });
+    const { blogId, uuid, errorMessage } = req.query;
+    res.render('otpVerify', { blogId, uuid, errorMessage: errorMessage || null });
 });
 
-router.post('/verify', verifyOTP, async (req, res) => {
-    const { blogId } = req.body;
+router.post('/verify', async (req, res, next) => {
+    const { email, otp, blogId } = req.body;
+    const { uuid } = req.query;
+
+    const storedOtp = await Otp.findOne({ email }).sort({ createdAt: -1 });
+    if (!storedOtp || storedOtp.otp !== otp) {
+        const errorMessage = 'Invalid or expired OTP';
+        return res.redirect(`/otp/verify?blogId=${blogId}&uuid=${uuid}&errorMessage=${errorMessage}`);
+    }
+
     try {
         const blog = await Blog.findById(blogId);
         if (!blog || !blog.coverImageURL) {

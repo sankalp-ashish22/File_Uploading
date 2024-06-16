@@ -143,20 +143,32 @@
             animation-duration: 19s;
             animation-delay: -3s;
         }
-        h1{
-            color:#ffff;
+
+        h1 {
+            color: #fff;
             font-size: larger;
-            
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-bottom: 1px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Request OTP</h1>
-        <form action="/otp/generate?uuid=<%=uuid%>" method="post">
+        <form action="/otp/generate?uuid=<%= uuid %>" method="post">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
             <input type="hidden" name="blogId" value="<%= blogId %>">
+            <% if (errorMessage) { %>
+                <div class="error-message">
+                    <%= errorMessage %>
+                </div>
+            <% } %>
             <button type="submit">Request OTP</button>
         </form>
     </div>
