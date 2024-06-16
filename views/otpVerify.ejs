@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify OTP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <style>
@@ -70,13 +69,6 @@
             text-align: center;
             border: 1px solid #ccc;
             border-radius: 4px;
-        }
-
-        .error-message {
-            color: red;
-            text-align: center;
-            margin-bottom: 2px;
-            margin-top: 10px;
         }
 
         button {
@@ -176,10 +168,9 @@
             animation-duration: 19s;
             animation-delay: -3s;
         }
-        
-        h1 {
+        h1{
             font-size: larger;
-            color: #fff;
+            color: #ffff
         }
     </style>
 </head>
@@ -200,9 +191,6 @@
                 <input type="text" name="otp6" maxlength="1" required>
             </div>
             <input type="hidden" id="otp" name="otp">
-            <% if (errorMessage) { %>
-                <p class="error-message"><%= errorMessage %></p>
-            <% } %>
             <button type="submit">Verify and Download</button>
         </form>
     </div>

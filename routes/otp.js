@@ -5,7 +5,6 @@ const Otp = require('../models/otp');
 const User = require('../models/user');
 const Blog = require('../models/Blog');
 const path = require('path');
-const { verifyOTP } = require('../middlewares/otpVerification');
 const client = require("../client");
 require('dotenv').config();
 
@@ -42,7 +41,7 @@ async function otpgenerator(email, blogId, uuid, res) {
 
 async function find_in_redis(search_mail) {
     const key = getHashKey(search_mail);
-    const cachedValue = await client.get(key); // Corrected Redis command
+    const cachedValue = await client.get(key);
     return cachedValue;
 }
 
@@ -50,9 +49,10 @@ function getHashKey(search_mail) {
     return crypto.createHash('sha256').update(JSON.stringify(search_mail)).digest('hex');
 }
 
-router.get('/request', (req, res) => {
+router.get('/request/:uuid', (req, res) => {
     const { blogId, uuid, errorMessage } = req.query;
-    res.render('otpRequest', { blogId, uuid, errorMessage: errorMessage || null });
+    const { uuid: requestUuid } = req.params;
+    res.render('otpRequest', { blogId, uuid: requestUuid, errorMessage: errorMessage || null });
 });
 
 router.post('/generate', async (req, res) => {
@@ -61,16 +61,16 @@ router.post('/generate', async (req, res) => {
     const checkRedis = await find_in_redis(email);
     if (checkRedis) {
         console.log("Cache Hit");
-        return otpgenerator(email, blogId, uuid, res); // Added return statement
+        return otpgenerator(email, blogId, uuid, res);
     }
     const user = await User.findOne({ email });
     if (!user) {
         const errorMessage = 'Email not found';
-        return res.redirect(`/otp/request?blogId=${blogId}&uuid=${uuid}&errorMessage=${errorMessage}`);
+        return res.redirect(`/otp/request/${uuid}?blogId=${blogId}&errorMessage=${errorMessage}`);
     }
     console.log("Cache Miss");
     const key = getHashKey(email);
-    await client.set(key, JSON.stringify(user), 'EX', 3600); // Store in the cached memory for 300 seconds after that it will expire
+    await client.set(key, JSON.stringify(user), 'EX', 3600);
     otpgenerator(email, blogId, uuid, res);
 });
 
@@ -79,7 +79,7 @@ router.get('/verify', (req, res) => {
     res.render('otpVerify', { blogId, uuid, errorMessage: errorMessage || null });
 });
 
-router.post('/verify', async (req, res, next) => {
+router.post('/verify', async (req, res) => {
     const { email, otp, blogId } = req.body;
     const { uuid } = req.query;
 
