@@ -629,6 +629,46 @@ body{
     }
 
 }
+.card {
+    background-color: var(--light); /* Adjust background color as needed */
+    border-radius: 10px; /* Adjust border radius for card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add box shadow for depth */
+    margin-bottom: 20px; /* Adjust margin between cards */
+    overflow: hidden; /* Ensure content inside does not overflow */
+}
+
+.card .card-img-top {
+    width: 100%; /* Ensures image fills the entire width of the card */
+    height: 150px; /* Fixed height of the image, adjust as per your design */
+    object-fit: cover; /* Maintain aspect ratio and cover the entire space */
+    border-top-left-radius: 10px; /* Match card border radius */
+    border-top-right-radius: 10px; /* Match card border radius */
+}
+
+.card .card-body {
+    padding: 20px; /* Padding inside the card body */
+}
+
+.card .card-title {
+    font-size: 1.25rem; /* Adjust card title font size */
+    margin-bottom: 0.75rem; /* Bottom margin for title */
+}
+
+.card .btn-primary {
+    background-color: var(--primary); /* Primary button background color */
+    color: var(--light); /* Button text color */
+    border: none; /* Remove default button border */
+    padding: 8px 16px; /* Padding inside the button */
+    font-size: 0.875rem; /* Button font size */
+    text-decoration: none; /* Remove underline */
+    border-radius: 4px; /* Button border radius */
+    transition: background-color 0.3s ease; /* Smooth background transition */
+}
+
+.card .btn-primary:hover {
+    background-color: #0056b3; /* Darken background color on hover */
+}
+
     </style>
     <title>Homepage</title>
 </head>
@@ -692,8 +732,8 @@ body{
                         <li><a href="#">
                                 Analytics
                             </a></li>
-                        /
-                        <li><a href="#" class="active">Shop</a></li>
+                        
+                        <li><a href="#" class="active">Uploads</a></li>
                     </ul>
                 </div>
                 <a href="/blog/add-new" class="report">
@@ -702,132 +742,22 @@ body{
                 </a>
             </div>
 
-            <!-- Insights -->
-            <ul class="insights">
-                <li>
-                    <i class='bx bx-calendar-check'></i>
-                    <span class="info">
-                        <h3>
-                            1,074
-                        </h3>
-                        <p>Paid Order</p>
-                    </span>
-                </li>
-                <li><i class='bx bx-show-alt'></i>
-                    <span class="info">
-                        <h3>
-                            3,944
-                        </h3>
-                        <p>Site Visit</p>
-                    </span>
-                </li>
-                <li><i class='bx bx-line-chart'></i>
-                    <span class="info">
-                        <h3>
-                            14,721
-                        </h3>
-                        <p>Searches</p>
-                    </span>
-                </li>
-                <li><i class='bx bx-dollar-circle'></i>
-                    <span class="info">
-                        <h3>
-                            $6,742
-                        </h3>
-                        <p>Total Sales</p>
-                    </span>
-                </li>
-            </ul>
-            <!-- End of Insights -->
 
             <div class="bottom-data">
-                <div class="orders">
-                    <div class="header">
-                        <i class='bx bx-receipt'></i>
-                        <h3>Recent Orders</h3>
-                        <i class='bx bx-filter'></i>
-                        <i class='bx bx-search'></i>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Order Date</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <img src="images/profile-1.jpg">
-                                    <p>John Doe</p>
-                                </td>
-                                <td>14-08-2023</td>
-                                <td><span class="status completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="images/profile-1.jpg">
-                                    <p>John Doe</p>
-                                </td>
-                                <td>14-08-2023</td>
-                                <td><span class="status pending">Pending</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="images/profile-1.jpg">
-                                    <p>John Doe</p>
-                                </td>
-                                <td>14-08-2023</td>
-                                <td><span class="status process">Processing</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+               
 
-                <!-- Reminders -->
-                <!-- <div class="reminders"> -->
-                    <!-- <div class="header">
-                        <i class='bx bx-note'></i>
-                        <h3>Remiders</h3>
-                        <i class='bx bx-filter'></i>
-                        <i class='bx bx-plus'></i>
+              
+                <% blogs.forEach(blog => { %>
+                    <div class="card" style="width: 18rem;">
+                        <img src="<%= blog.coverImageURL %>" class="card-img-top" alt="Blog Cover Image" width="100%" height="150px">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= blog.title %></h5>
+                            <a href="/blog/<%= blog._id %>" class="btn btn-primary">View</a>
+                        </div>
                     </div>
-                    <ul class="task-list">
-                        <li class="completed">
-                            <div class="task-title">
-                                <i class='bx bx-check-circle'></i>
-                                <p>Start Our Meeting</p>
-                            </div>
-                            <i class='bx bx-dots-vertical-rounded'></i>
-                        </li>
-                        <li class="completed">
-                            <div class="task-title">
-                                <i class='bx bx-check-circle'></i>
-                                <p>Analyse Our Site</p>
-                            </div>
-                            <i class='bx bx-dots-vertical-rounded'></i>
-                        </li>
-                        <li class="not-completed">
-                            <div class="task-title">
-                                <i class='bx bx-x-circle'></i>
-                                <p>Play Footbal</p>
-                            </div>
-                            <i class='bx bx-dots-vertical-rounded'></i>
-                        </li>
-                    </ul> -->
-                    <div class="container mt-3">
-                      <% blogs.forEach(blog => { %>
-                          <div class="card" style="width: 18rem;">
-                              <img src="<%= blog.coverImageURL %>" class="card-img-top" alt="...">
-                              <div class="card-body">
-                                <h5 class="card-title">blog.title</h5>
-                                <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
-                                <a href="/blog/<%= blog._id %>" class="btn btn-primary">View</a>
-                              </div>
-                            </div>
-                      <% }) %>
-                  </div>
+                <% }) %>
+                
+                  
                 <!-- </div> -->
 
                 <!-- End of Reminders-->
