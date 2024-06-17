@@ -10,10 +10,12 @@ function checkForAuthenticationCookie(cookieName) {
         try {
             const userPayload = validateToken(tokenCookieValue);
             req.user = userPayload;
+            console.log('Authenticated user ID (in middleware):', req.user._id); // Debug log
+            next();
         } catch (error) {
+            console.error('Error validating token:', error.message);
             return res.redirect("/user/signin");
         }
-        next();
     };
 }
 

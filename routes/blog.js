@@ -20,6 +20,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// Route for viewing a specific blog by ID
 router.get('/:id', checkForAuthenticationCookie('token'), async (req, res) => {
     const { id } = req.params;
 
@@ -44,6 +45,7 @@ router.get('/:id', checkForAuthenticationCookie('token'), async (req, res) => {
     }
 });
 
+// Route for downloading a blog
 router.get('/download/:id', checkForAuthenticationCookie('token'), async (req, res) => {
     const { id } = req.params;
     const uuid = crypto.randomUUID();
@@ -63,12 +65,13 @@ router.get('/download/:id', checkForAuthenticationCookie('token'), async (req, r
     }
 });
 
+// Route for creating a new blog
 router.post('/', checkForAuthenticationCookie('token'), upload.single('coverImage'), async (req, res) => {
     try {
         const { title } = req.body;
         const blog = await Blog.create({
             title,
-            createdBy: req.user._id,
+            createdBy: req.user._id,  // Ensure createdBy is set to the authenticated user's ID
             coverImageURL: `uploads/${req.file.filename}`,
         });
 
