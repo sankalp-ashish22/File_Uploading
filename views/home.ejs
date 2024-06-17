@@ -606,7 +606,71 @@ body{
 #myname{
     color: #181a1e;
 }
+.profile {
+            position: relative;
+        }
 
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 40px; /* Adjust based on your profile image height */
+            right: 0;
+            background-color: var(--light);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--grey);
+        }
+
+        .profile:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Dark Mode Toggle Styles */
+        .theme-toggle {
+            display: block;
+            width: 50px;
+            height: 25px;
+            background: var(--grey);
+            cursor: pointer;
+            position: relative;
+            border-radius: 25px;
+            transition: background-color 0.3s;
+        }
+
+        .theme-toggle::before {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            bottom: 2px;
+            width: 21px;
+            background: var(--primary);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        #theme-toggle:checked + .theme-toggle::before {
+            left: calc(100% - 23px);
+        }
+
+        /* Dark Mode Styles */
+        body.dark {
+            --light: #181a1e;
+            --grey: #25252c;
+            --dark: #fbfbfb;
+        }
 
     </style>
     <title>Homepage</title>
@@ -659,9 +723,13 @@ body{
                 <i class='bx bx-task'></i>
                 <span class="count"><%=blogCount%></span>
             </a>
-            <a href="#" class="profile">
+            <div class="profile">
                 <img src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-PNG-Photos.png">
-            </a>
+                <div class="dropdown-menu">
+                    <a href="/user/change-profile-picture">Change Picture</a>
+                    <a href="/user/logout">Logout</a>
+                </div>
+            </div>
         </nav>
 
         <!-- End of Navbar -->
@@ -720,6 +788,26 @@ function toggleSidebar() {
     sidebar.classList.toggle('close');
     content.classList.toggle('close');
 }
+ // JavaScript Code for Theme Toggle
+ document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+
+            if (localStorage.getItem('theme') === 'dark') {
+                body.classList.add('dark');
+                themeToggle.checked = true;
+            }
+
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    body.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        });
 
     </script>
     <script src="index.js"></script>
