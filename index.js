@@ -39,9 +39,19 @@ app.get('/', checkForAuthenticationCookie('token'), async (req, res) => {
     try {
         // Fetch blogs created by the current authenticated user
         const userBlogs = await Blog.find({ createdBy: req.user._id });
+        const blogCount = userBlogs.length;
+        const blogsWithSize = userBlogs.map(blog => {
+            const contentLength = blog.content ? blog.content.length : 0;
+            return {
+                ...blog._doc,
+                totalSize: contentLength
+            };
+        });
         res.render("home", {
             user: req.user,
             blogs: userBlogs,
+            blogCount: blogCount,
+            blogsWithSize: blogsWithSize,
         });
     } catch (error) {
         console.error('Error fetching blogs:', error);
