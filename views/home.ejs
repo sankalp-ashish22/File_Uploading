@@ -595,6 +595,17 @@ body{
         grid-template-columns: 1fr;
     }
 }
+#greeting {
+    font-family: 'Arial', sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: #264bb0cb;
+    text-align: center;
+
+}
+#myname{
+    color: #181a1e;
+}
 
 
     </style>
@@ -658,7 +669,7 @@ body{
         <main>
             <div class="header">
                 <div class="left">
-                    <h1>Dashboard</h1>
+                    <h1 id="greeting">Greetings, <i id="myname"><%= user.fullName %></i></h1>
                     <ul class="breadcrumb">
                         <li><a href="#">
                                 Analytics

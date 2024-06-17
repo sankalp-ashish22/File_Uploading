@@ -2,13 +2,15 @@ const JWT = require("jsonwebtoken")
 
 const secret = "$aVe@$ol@Priv@Lim.";
 
-function createTokenForUser(user){
-const payload = {
-    _id: user._id,
-    email: user.email,
-    profileImageURL: user.profileImageURL,
-    role: user.role,
-};
+function createTokenForUser(user) {
+    const payload = {
+        _id: user._id,
+        email: user.email,
+        profileImageURL: user.profileImageURL,
+        role: user.role,
+        fullName: user.fullName, // Ensure fullName is added here
+    };
+  
 const token = JWT.sign(payload,secret);
 return token;
 }
@@ -22,3 +24,5 @@ module.exports ={
     createTokenForUser,
     validateToken,
 };
+  
+    

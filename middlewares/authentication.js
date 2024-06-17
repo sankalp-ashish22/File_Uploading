@@ -1,4 +1,3 @@
-// middlewares/authentication.js
 const { validateToken } = require("../services/authentication");
 
 function checkForAuthenticationCookie(cookieName) {
@@ -9,8 +8,8 @@ function checkForAuthenticationCookie(cookieName) {
         }
         try {
             const userPayload = validateToken(tokenCookieValue);
+            console.log('Decoded user payload:', userPayload); // Check if fullName is present
             req.user = userPayload;
-            console.log('Authenticated user ID (in middleware):', req.user._id); // Debug log
             next();
         } catch (error) {
             console.error('Error validating token:', error.message);

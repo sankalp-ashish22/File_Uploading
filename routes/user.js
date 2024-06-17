@@ -31,7 +31,6 @@ router.get("/logout", (req, res) => {
 
 router.post('/signup', async (req, res) => {
     const { fullName, email, password } = req.body;
-    console.log("Received data:", { fullName, email, password });
 
     try {
         const newUser = await User.create({
@@ -42,14 +41,15 @@ router.post('/signup', async (req, res) => {
         console.log("User created successfully:", newUser);
         return res.redirect("/user/signin");
     } catch (error) {
-        if (error.code === 11000) { // MongoDB duplicate key error
+        if (error.code === 11000) {
             console.error("Email already exists:", email);
-            return res.status(400).send("Email already exists");
+            return res.status(400).render("signup", { error: "Email already exists" });
         } else {
             console.error("Error during user creation:", error);
-            return res.status(500).send("Internal Server Error");
+            return res.status(500).render("signup", { error: "Internal Server Error" });
         }
     }
 });
+
 
 module.exports = router;
