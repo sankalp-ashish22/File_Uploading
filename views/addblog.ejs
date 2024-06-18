@@ -468,59 +468,127 @@
         button:hover {
             background-color: #0056a3;
         }
+        #greeting {
+    font-family: 'Arial', sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: #264bb0cb;
+    text-align: center;
+
+}
+
+.my_name{
+    color: #181a1e;
+}
+.myname-dark{
+color:#eee;
+}
+.profile {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 40px; /* Adjust based on your profile image height */
+            right: 0;
+            background-color: var(--light);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--grey);
+        }
+
+        .profile:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Dark Mode Toggle Styles */
+        .theme-toggle {
+            display: block;
+            width: 50px;
+            height: 25px;
+            background: var(--grey);
+            cursor: pointer;
+            position: relative;
+            border-radius: 25px;
+            transition: background-color 0.3s;
+        }
+
+        .theme-toggle::before {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            bottom: 2px;
+            width: 21px;
+            background: var(--primary);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        #theme-toggle:checked + .theme-toggle::before {
+            left: calc(100% - 23px);
+        }
+
+        /* Dark Mode Styles */
+        body.dark {
+            --light: #181a1e;
+            --grey: #25252c;
+            --dark: #fbfbfb;
+        }
+        .text-upload{
+            color:  #3c3c64;
+        }
+        .form-input input[type="search"] {
+        width: 300px; /* Adjust the width as per your requirement */
+    }
     </style>
 </head>
 
 <body>
     <div class="sidebar">
-        <div class="logo">
-            <!-- <i class='bx bx-menu'></i> -->
-            <!-- <span class="logo-name">Nav Menu</span> -->
-        </div>
+        <a href="#" class="logo">
+            <i class='bx bx-cloud-upload bx-fade-up-hover'></i>
+            <div class="logo-name"><span>File</span>Upload</div>
+        </a>
 
         <ul class="side-menu">
-            <li class="active">
-                <a href="#">
-                    <i class='bx bxs-dashboard'></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class='bx bxs-shopping-bag-alt'></i>
-                    <span>Orders</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class='bx bxs-doughnut-chart'></i>
-                    <span>Analytics</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class='bx bxs-message-dots'></i>
-                    <span>Messages</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class='bx bxs-group'></i>
-                    <span>Team</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class='bx bxs-cog'></i>
-                    <span>Settings</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="logout">
-                    <i class='bx bxs-log-out-circle'></i>
-                    <span>Logout</span>
-                </a>
-            </li>
+            
+            
+    
+             
+                  
+                    <li class="active"><a href="/blog/add-new"><i class='bx bx-analyse'></i>Upload-data</a></li>
+                    <li ><a href="/"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
+                    
+                    <!-- <li><a href="#"><i class='bx bx-message-square-dots'></i>Tickets</a></li>
+                    <li><a href="#"><i class='bx bx-group'></i>Users</a></li>
+                    <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li> -->
+                </ul>
+                <ul class="side-menu">
+                    <li>
+                        <a href="/user/logout" class="logout">
+                            <i class='bx bx-log-out-circle'></i>
+                            Logout
+                        </a>
+                    </li>
+                </ul>
+          
+          
+           
+           
         </ul>
     </div>
 
@@ -529,38 +597,32 @@
             <i class='bx bx-menu toggle-icon'></i>
             <form action="#">
                 <div class="form-input">
-                    <input type="text" placeholder="Search...">
-                    <button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+                    <input type="search" id="searchInput" placeholder="Search..." size="40">
+                    <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
                 </div>
             </form>
             <input type="checkbox" id="theme-toggle" hidden>
             <label for="theme-toggle" class="theme-toggle"></label>
-            <a href="#" class="notif">
-                <i class='bx bxs-bell'></i>
-                <span class="count">5</span>
-            </a>
-            <a href="#" class="profile">
-                <img src="user.jpg" alt="">
-            </a>
+            <div class="profile">
+                <img src="https://th.bing.com/th/id/OIP._pjSPwMiy9sHkBDPvTYTNQHaHa?w=512&h=512&rs=1&pid=ImgDetMain">
+                <div class="dropdown-menu">
+                    <!-- <a href="/user/change-profile-picture">Change Picture</a> -->
+                    <a href="/user/logout">Logout</a>
+                </div>
+            </div>
         </nav>
 
         <main>
             <div class="header">
                 <div class="left">
-                    <h1>Dashboard</h1>
+                    <h1 id="greeting">Empower <strong id="myname" class="my_name">Uploads</strong></h1>
                     <ul class="breadcrumb">
-                        <li>
-                            <a href="#">Dashboard</a>
-                        </li>
                         <li>
                             <a href="/" class="active">Home</a>
                         </li>
                     </ul>
                 </div>
-                <a href="#" class="btn">
-                    <i class='bx bx-plus'></i>
-                    <span>Add Project</span>
-                </a>
+               
             </div>
 
             <div class="data">
@@ -569,11 +631,11 @@
                     <div class="form-container">
                         <form action="/blog" method="post" enctype="multipart/form-data">
                             <div class="form-group">
-                                <label for="coverImage">Cover Image:</label>
+                                <label for="coverImage" class="text-upload">Cover Image:</label>
                                 <input type="file" id="coverImage" name="coverImage" required>
                             </div>
                             <div class="form-group">
-                                <label for="title">Title:</label>
+                                <label for="title" class="text-upload">Title:</label>
                                 <input type="text" id="title" name="title" required>
                             </div>
                             <button type="submit">Submit</button>
@@ -590,6 +652,37 @@
         const menuButton = document.querySelector('.toggle-icon');
         menuButton.addEventListener('click', () => {
             sidebar.classList.toggle('close');
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+            const Greeter_name = document.getElementById("myname");
+          
+
+            if (localStorage.getItem('theme') === 'dark') {
+                body.classList.add('dark');
+             
+                Greeter_name.classList.remove('my_name');
+                Greeter_name.classList.add('myname-dark');
+            
+                themeToggle.checked = true;
+            }
+
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('dark');
+                  
+                    Greeter_name.classList.remove('my_name');
+                    Greeter_name.classList.add('myname-dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    body.classList.remove('dark');
+                
+                    Greeter_name.classList.remove('myname-dark');
+                    Greeter_name.classList.add('my_name');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
         });
     </script>
 </body>

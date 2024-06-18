@@ -59,6 +59,21 @@ app.get('/', checkForAuthenticationCookie('token'), async (req, res) => {
     }
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server started at PORT: ${PORT}`);
