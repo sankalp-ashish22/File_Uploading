@@ -554,20 +554,21 @@ color:#eee;
         .form-input input[type="search"] {
         width: 300px; /* Adjust the width as per your requirement */
     }
+
     .image-container {
     text-align: center; /* Center the image container content */
     margin-bottom: 20px;
 }
 
 .image-container img {
-    width: 30%; /* Reduce the width further as per your requirement */
+    width: 30%; /* Adjust image width as needed */
     height: auto;
     display: block;
     margin: 0 auto;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
     border-radius: 8px;
-    border: 1px solid #ccc; /* Border that only covers the image */
-    padding: 10px; /* Padding to give some space inside the border */
+    border: 1px solid #ccc;
+    padding: 10px;
 }
 
 .download-btn {
@@ -590,6 +591,61 @@ color:#eee;
 .text-center {
     text-align: center; /* Ensure the div is centered */
 }
+.link-container {
+    display: table;
+    width: 100%;
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.table-row {
+    display: table-row;
+}
+
+.table-cell {
+    display: table-cell;
+    padding: 10px;
+    vertical-align: middle;
+}
+
+.label {
+    font-weight: bold;
+    width: 150px;
+}
+
+.generated-link {
+    color: #1976D2;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin-top: 10px;
+}
+
+.copy-btn {
+    background-color: #1976D2;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.copy-btn:hover {
+    background-color: #0056a3;
+}
+
+
+
+
 
      
     </style>
@@ -668,10 +724,21 @@ color:#eee;
                 <div class="image-container">
                     <img src="/<%= blog.coverImageURL %>" alt="Cover Image">
                 </div>
-                <div class="text-center">
-                    <a href="/otp/request/<%= uuid %>?blogId=<%= blog._id %>&uuid=<%= uuid %> " class="download-btn">/otp/request/<%= uuid %>?blogId=<%= blog._id %>&uuid=<%= uuid %></a>
+              
+                <div class="link-container">
+                    <div class="table-row">
+                        <div class="table-cell label">Generated link</div>
+                        <div class="table-cell">
+                            <a href="/otp/request/<%= uuid %>?blogId=<%= blog._id %>&uuid=<%= uuid %>" class="generated-link">/otp/request/<%= uuid %>?blogId=<%= blog._id %>&uuid=<%= uuid %></a>
+                           
+                        </div>
+                        <div class="button-container">
+                            <button class="copy-btn" onclick="copyLink()">Copy</button>
+                        </div>
+                    </div>
                 </div>
-               
+                
+                
             </div>
 
          
@@ -720,6 +787,15 @@ color:#eee;
                 }
             });
         });
+        function copyLink() {
+    const link = document.querySelector('.generated-link').href;
+    navigator.clipboard.writeText(link).then(() => {
+        alert('Link copied to clipboard!');
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
+}
+
     </script>
 </body>
 
