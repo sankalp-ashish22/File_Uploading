@@ -675,6 +675,7 @@ color:#eee;
             --grey: #25252c;
             --dark: #fbfbfb;
         }
+ 
 
     </style>
     <title>Homepage</title>
@@ -690,11 +691,11 @@ color:#eee;
         </a>
         <ul class="side-menu">
             <li><a href="/blog/add-new"><i class='bx bx-analyse'></i>Upload-data</a></li>
-            <li><a href="#"><i class='bx bx-store-alt'></i>Shop</a></li>
             <li class="active"><a href="#"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
-            <li><a href="#"><i class='bx bx-message-square-dots'></i>Tickets</a></li>
+            <li><a href="#"><i class='bx bx-task'></i>BlogCount - <%=blogCount%></a></li>
+            <!-- <li><a href="#"><i class='bx bx-message-square-dots'></i>Tickets</a></li>
             <li><a href="#"><i class='bx bx-group'></i>Users</a></li>
-            <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li>
+            <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li> -->
         </ul>
         <ul class="side-menu">
             <li>
@@ -717,7 +718,7 @@ color:#eee;
             
             <form action="#">
                 <div class="form-input">
-                    <input type="search" placeholder="Search...">
+                    <input type="search" id="searchInput" placeholder="Search...">
                     <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
                 </div>
             </form>
@@ -730,7 +731,7 @@ color:#eee;
             <div class="profile">
                 <img src="https://th.bing.com/th/id/OIP._pjSPwMiy9sHkBDPvTYTNQHaHa?w=512&h=512&rs=1&pid=ImgDetMain">
                 <div class="dropdown-menu">
-                    <a href="/user/change-profile-picture">Change Picture</a>
+                    <!-- <a href="/user/change-profile-picture">Change Picture</a> -->
                     <a href="/user/logout">Logout</a>
                 </div>
             </div>
@@ -743,11 +744,8 @@ color:#eee;
                 <div class="left">
                     <h1 id="greeting">Greetings, <i id="myname" class="my_name"><%= user.fullName %></i></h1>
                     <ul class="breadcrumb">
-                        <li><a href="#">
-                                Analytics
-                            </a></li>
-                        
-                        <li><a href="#" class="active">Uploads</a></li>
+
+                        <li ><a href="#" ><subheading h2><i>Dive into your data</i></h2></a></li>
                     </ul>
                 </div>
                 <a href="/blog/add-new" class="report">
@@ -824,6 +822,31 @@ function toggleSidebar() {
                 }
             });
         });
+        document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    const cards = document.querySelectorAll('.card'); // Assuming each blog is represented as a card
+
+    searchInput.addEventListener('input', () => {
+        const searchText = searchInput.value.trim().toLowerCase();
+
+        cards.forEach(card => {
+            const title = card.querySelector('.card-title').textContent.toLowerCase();
+            if (title.includes(searchText)) {
+                card.style.display = 'block'; // Show the card if the title matches
+            } else {
+                card.style.display = 'none'; // Hide the card if the title doesn't match
+            }
+        });
+    });
+
+    // Optional: Handle form submission (prevent default behavior)
+    const searchForm = document.getElementById('searchForm');
+    searchForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // Prevent form submission
+    });
+});
+
+        
 
     </script>
     <script src="index.js"></script>
