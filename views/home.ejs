@@ -603,8 +603,12 @@ body{
     text-align: center;
 
 }
-#myname{
+
+.my_name{
     color: #181a1e;
+}
+.myname-dark{
+color:#eee;
 }
 .profile {
             position: relative;
@@ -724,7 +728,7 @@ body{
                 <span class="count"><%=blogCount%></span>
             </a>
             <div class="profile">
-                <img src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-PNG-Photos.png">
+                <img src="https://th.bing.com/th/id/OIP._pjSPwMiy9sHkBDPvTYTNQHaHa?w=512&h=512&rs=1&pid=ImgDetMain">
                 <div class="dropdown-menu">
                     <a href="/user/change-profile-picture">Change Picture</a>
                     <a href="/user/logout">Logout</a>
@@ -737,7 +741,7 @@ body{
         <main>
             <div class="header">
                 <div class="left">
-                    <h1 id="greeting">Greetings, <i id="myname"><%= user.fullName %></i></h1>
+                    <h1 id="greeting">Greetings, <i id="myname" class="my_name"><%= user.fullName %></i></h1>
                     <ul class="breadcrumb">
                         <li><a href="#">
                                 Analytics
@@ -792,18 +796,30 @@ function toggleSidebar() {
  document.addEventListener('DOMContentLoaded', () => {
             const themeToggle = document.getElementById('theme-toggle');
             const body = document.body;
+            const Greeter_name = document.getElementById("myname");
+          
 
             if (localStorage.getItem('theme') === 'dark') {
                 body.classList.add('dark');
+             
+                Greeter_name.classList.remove('my_name');
+                Greeter_name.classList.add('myname-dark');
+            
                 themeToggle.checked = true;
             }
 
             themeToggle.addEventListener('change', () => {
                 if (themeToggle.checked) {
                     body.classList.add('dark');
+                  
+                    Greeter_name.classList.remove('my_name');
+                    Greeter_name.classList.add('myname-dark');
                     localStorage.setItem('theme', 'dark');
                 } else {
                     body.classList.remove('dark');
+                
+                    Greeter_name.classList.remove('myname-dark');
+                    Greeter_name.classList.add('my_name');
                     localStorage.setItem('theme', 'light');
                 }
             });
