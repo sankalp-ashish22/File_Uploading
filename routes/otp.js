@@ -26,7 +26,19 @@ async function otpgenerator(email, blogId, uuid, res) {
         from: process.env.EMAIL_USER,
         to: email,
         subject: 'Your OTP for file download',
-        text: `Your OTP is ${otp}`,
+        text: 
+`Dear User,
+
+Just one more step to download.
+
+You must confirm your identity using this one-time pass code: ${otp}
+
+Note: This code will expire in 10 minutes.
+
+
+Sincerely,
+
+Sankalp Ashish `,
     };
 
     transporter.sendMail(mailOptions, (error) => {
