@@ -762,6 +762,57 @@ body.loading .loader-container {
 .card-text {
     margin-bottom: 0; /* Remove margin below card text */
 }
+.card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    
+}
+
+.user-actions .card-text {
+    margin-right: 20px;
+}
+
+.btn-success, .btn-danger {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    color: var(--light);
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success {
+    background: var(--success);
+}
+
+.btn-success:hover {
+    background: #1c7206;
+}
+
+.btn-danger {
+    background: var(--danger);
+}
+
+.btn-danger:hover {
+    background: #b2102f;
+}
+.equal-btn {
+    display: inline-flex; /* Use flexbox to ensure equal dimensions */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    height: 38px; /* Adjust height as needed */
+    padding: 0 15px; /* Adjust padding as needed */
+}
 
 
 
@@ -842,19 +893,34 @@ body.loading .loader-container {
               
             </div>
             <div id="registeredUsers" class="data-bottom">
-                <!-- Display registered users here -->
+                <!-- User cards go here -->
                 <% users.forEach(user => { %>
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title"><%= user.fullName %></h5>
-                            <p class="card-text">Email: <%= user.email %></p>
-                            <!-- Add more details as per your User schema -->
-                            <!-- Example: <p class="card-text">Role: <%= user.role %></p> -->
-                            <!-- Example: <a href="#" class="btn btn-primary">View Profile</a> -->
+                    <div class="card mb-3">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div class="user-info" style="flex: 1;">
+                                <h5 class="card-title"><%= user.fullName %></h5>
+                                <p class="card-text" style="display: inline; margin-right: 20px;">Email: <%= user.email %></p>
+                            </div>
+                            <div class="user-actions" style="white-space: nowrap;">
+                                <a href="#" class="btn btn-success equal-btn"><i class="fas fa-eye"></i> View</a>
+                                <span style="margin-left: 10px;"></span>
+                                <a href="#" class="btn btn-danger equal-btn"><i class="fas fa-trash"></i> Delete</a>
+                            </div>
+                            
+                            
+                            
                         </div>
                     </div>
                 <% }); %>
             </div>
+            
+
+            
+            
+            
+            
+            
+            
             
         
             
