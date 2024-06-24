@@ -12,6 +12,7 @@ const app = express();
 const PORT = 8000;
 
 const Blog = require('./models/Blog');
+const User = require('./models/user');
 
 // MongoDB connection
 mongoose.connect('mongodb://localhost:27017/FileUpload')
@@ -88,6 +89,15 @@ app.get('/admin/homepage', checkForAuthenticationCookie('token'), async (req, re
     }
 });
 
+app.get('/admin/registered_user', async (req, res) => {
+    try {
+        const users = await User.find({}); // Fetch all users from database
+        res.render('registered_user', { users: users }); // Render 'registered_user' view with users data
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server started at PORT: ${PORT}`);
