@@ -743,6 +743,70 @@ body.loading .loader-container {
     font-size: 16px;
     color: var(--dark-grey);
 }
+.card {
+    background-color: var(--light);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    position: relative;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.content-container {
+    display: flex;
+    align-items: center; /* Center align items */
+    justify-content: space-between; /* Distribute space between items */
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    margin: 0; /* Remove margin for better alignment */
+}
+
+.card-text {
+    margin: 0; /* Remove margin to be directly below the heading */
+}
+
+.circle-container {
+    width: 120px;
+    height: 120px;
+}
+
+.circle-background {
+    fill: none;
+    stroke: #e6e6e6;
+    stroke-width: 12;
+}
+
+.circle-progress {
+    fill: none;
+    stroke: #3498db;
+    stroke-width: 12;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.3s ease;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+.circle-text {
+    fill: #333;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+
 
 
 
@@ -837,15 +901,30 @@ body.loading .loader-container {
                     </a>
                     </div>
                     
-        
-                    <!-- Total Storage Consumed Section -->
-                    <div class="card card-hover">
-                        <div class="card-body">
-                            <h5 class="card-title"> Total Storage Consumed</h5>
-                            <p class="card-text">Check total storage consumed here...</p>
-                        </div>
-                    </div>
-        
+
+<!-- Total Storage Consumed Section -->
+<div class="card card-hover">
+    <div class="card-body">
+        <div class="content-container">
+            <div class="text-container">
+                <h5 class="card-title">Total Storage Consumed</h5>
+                <p class="card-text">Check total storage consumed here...</p>
+            </div>
+            <div class="circle-container">
+                <svg width="120" height="120">
+                    <circle class="circle-background" cx="60" cy="60" r="54"></circle>
+                    <circle class="circle-progress" cx="60" cy="60" r="54" stroke-dasharray="339.292" stroke-dashoffset="0"></circle>
+                    <text x="60" y="60" class="circle-text" id="percentage-text">0%</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+                    
                  
                     
                 </div>
@@ -933,6 +1012,19 @@ function toggleSidebar() {
         setTimeout(() => {
             body.classList.remove('loading');
         }, 3000);
+
+
+
+        const storageConsumedPercentage = 75; // Replace with dynamic value
+    const circleProgress = document.querySelector('.circle-progress');
+    const circleText = document.getElementById('percentage-text');
+    const radius = 54;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (storageConsumedPercentage / 100) * circumference;
+
+    circleProgress.style.strokeDasharray = `${circumference}`;
+    circleProgress.style.strokeDashoffset = `${offset}`;
+    circleText.textContent = `${storageConsumedPercentage}%`;
     });
 
 
