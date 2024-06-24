@@ -1,6 +1,6 @@
-// routes/user.js
 const { Router } = require("express");
 const User = require('../models/user');
+const { createTokenForUser } = require("../services/authentication");
 const router = Router();
 
 router.get('/signin', (req, res) => {
@@ -15,7 +15,6 @@ router.post("/signin", async (req, res) => {
     const { email, password } = req.body;
     try {
         const token = await User.matchPasswordAndGenerateToken(email, password);
-        console.log('Token', token);
         return res.cookie("token", token).redirect("/");
     } catch (error) {
         console.error('Error during sign-in:', error.message);
@@ -50,6 +49,5 @@ router.post('/signup', async (req, res) => {
         }
     }
 });
-
 
 module.exports = router;

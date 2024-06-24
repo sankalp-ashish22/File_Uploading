@@ -37,6 +37,11 @@ app.use('/otp', otpRoute);
 // Home route
 app.get('/', checkForAuthenticationCookie('token'), async (req, res) => {
     try {
+        // Redirect admin to admin homepage
+        if (req.user.role === 'ADMIN') {
+            return res.redirect('/admin/homepage');
+        }
+        
         // Fetch blogs created by the current authenticated user
         const userBlogs = await Blog.find({ createdBy: req.user._id });
         const blogCount = userBlogs.length;
@@ -59,20 +64,29 @@ app.get('/', checkForAuthenticationCookie('token'), async (req, res) => {
     }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Admin homepage route
+app.get('/admin/homepage', checkForAuthenticationCookie('token'), async (req, res) => {
+    try {
+        const userBlogs = await Blog.find({ createdBy: req.user._id });
+        const blogCount = userBlogs.length;
+        const blogsWithSize = userBlogs.map(blog => {
+            const contentLength = blog.content ? blog.content.length : 0;
+            return {
+                ...blog._doc,
+                totalSize: contentLength
+            };
+        });
+        res.render("admin", {
+            user: req.user,
+            blogs: userBlogs,
+            blogCount: blogCount,
+            blogsWithSize: blogsWithSize,
+        });
+    } catch (error) {
+        console.error('Error fetching blogs:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 // Start the server
 app.listen(PORT, () => {

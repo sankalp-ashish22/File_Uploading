@@ -8,8 +8,11 @@ function checkForAuthenticationCookie(cookieName) {
         }
         try {
             const userPayload = validateToken(tokenCookieValue);
-            console.log('Decoded user payload:', userPayload); // Check if fullName is present
             req.user = userPayload;
+
+            if (userPayload.role === 'ADMIN' && req.path === '/') {
+                return res.redirect("/admin/homepage");
+            }
             next();
         } catch (error) {
             console.error('Error validating token:', error.message);

@@ -1,4 +1,4 @@
-const JWT = require("jsonwebtoken")
+const JWT = require("jsonwebtoken");
 
 const secret = "$aVe@$ol@Priv@Lim.";
 
@@ -11,18 +11,16 @@ function createTokenForUser(user) {
         fullName: user.fullName, // Ensure fullName is added here
     };
   
-const token = JWT.sign(payload,secret);
-return token;
+    const token = JWT.sign(payload, secret);
+    return token;
 }
 
 function validateToken(token){
-const payload = JWT.verify(token,secret);
-return payload;
+    const payload = JWT.verify(token, secret);
+    return payload;
 }
 
-module.exports ={
+module.exports = {
     createTokenForUser,
     validateToken,
 };
-  
-    

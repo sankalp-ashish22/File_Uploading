@@ -1,65 +1,63 @@
-const { createHmac, randomBytes } = require('node:crypto'); // HMAC for hashing
-const { Schema, model } = require('mongoose');
-const { createTokenForUser } = require('../services/authentication');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const { Schema } = mongoose;
 
-// User Schema
 const userSchema = new Schema({
     fullName: {
         type: String,
-        required: true,
+        required: true
     },
     email: {
         type: String,
         required: true,
-        unique: true, // fixed typo
-    },
-    salt: {
-        type: String,
-        
+        unique: true
     },
     password: {
         type: String,
-        required: true,
+        required: true
     },
     profileImageURL: {
-        type: String,
-        default: '/public/images/user_avatar.png',
+        type: String
     },
     role: {
         type: String,
-        enum: ["USER", "ADMIN"],
-        default: "USER",
-    },
-}, { timestamps: true });
+        default: 'USER'
+    }
+});
 
-// MIDDLEWARE - used for hashing the password before saving the password in database
-userSchema.pre("save", function(next) {
-    const user = this;
-    if (!user.isModified("password")) return next();
-
-    const salt = randomBytes(16).toString('hex'); // Specify 'hex' encoding
-    const hashedPassword = createHmac('sha256', salt).update(user.password).digest("hex");
-
-    user.salt = salt; // Use `user` to ensure you're setting the correct instance
-    user.password = hashedPassword;
+// Hash the user's password before saving
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
     next();
 });
-userSchema.static("matchPasswordAndGenerateToken",async function(email,password){
-const user = await this.findOne({email});
-if(!user) throw new Error('User not found!');
 
-const salt = user.salt;
-const hashedPassword = user.password;
-const userProvidedHash = createHmac("sha256",salt)
-.update(password)
-.digest("hex");
+// Method to match the password and generate a token
+userSchema.statics.matchPasswordAndGenerateToken = async function (email, password) {
+    const user = await this.findOne({ email });
+    if (!user) throw new Error('User not found');
 
-if(hashedPassword!==userProvidedHash) throw new Error(
-    "Incorrect Password"
-)
-const token = createTokenForUser(user);
-return token;
-})
-const User = model('User', userSchema); // Capitalized model name
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) throw new Error('Invalid password');
+
+    // Generate a token (assuming you have a function for that)
+    const token = createTokenForUser(user);
+    return token;
+};
+
+function createTokenForUser(user) {
+    const payload = {
+        _id: user._id,
+        email: user.email,
+        profileImageURL: user.profileImageURL,
+        role: user.role,
+        fullName: user.fullName,
+    };
+    return JWT.sign(payload, "$aVe@$ol@Priv@Lim.");
+}
+
+// Only define the model if it hasn't been defined already
+const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 module.exports = User;
