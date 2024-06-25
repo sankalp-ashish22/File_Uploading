@@ -907,14 +907,14 @@ body.loading .loader-container {
     <div class="card-body">
         <div class="content-container">
             <div class="text-container">
-                <h5 class="card-title">Total Storage Consumed</h5>
-                <p class="card-text">Check total storage consumed here...</p>
+                <h5 class="card-title">Total Blogs Uploaded</h5>
+                <p class="card-text">See total number of blogs here...</p>
             </div>
             <div class="circle-container">
                 <svg width="120" height="120">
                     <circle class="circle-background" cx="60" cy="60" r="54"></circle>
                     <circle class="circle-progress" cx="60" cy="60" r="54" stroke-dasharray="339.292" stroke-dashoffset="0"></circle>
-                    <text x="60" y="60" class="circle-text" id="percentage-text">0%</text>
+                    <text x="60" y="60" class="circle-text" id="percentage-text"><%=Tpercentage%></text>
                 </svg>
             </div>
         </div>
@@ -1013,9 +1013,13 @@ function toggleSidebar() {
             body.classList.remove('loading');
         }, 3000);
 
+        const num = document.getElementById('percentage-text').innerHTML;
+    console.log(num);
 
-
-        const storageConsumedPercentage = 75; // Replace with dynamic value
+        
+  
+      
+        const storageConsumedPercentage = num; // Replace with dynamic value
     const circleProgress = document.querySelector('.circle-progress');
     const circleText = document.getElementById('percentage-text');
     const radius = 54;
@@ -1027,8 +1031,7 @@ function toggleSidebar() {
     circleText.textContent = `${storageConsumedPercentage}%`;
     });
 
-
-
+ 
         
 
     </script>

@@ -64,30 +64,30 @@ app.get('/', checkForAuthenticationCookie('token'), async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
-// Admin homepage route
 app.get('/admin/homepage', checkForAuthenticationCookie('token'), async (req, res) => {
     try {
-        const userBlogs = await Blog.find({ createdBy: req.user._id });
+        const userBlogs = await Blog.find({ });
         const blogCount = userBlogs.length;
-        const blogsWithSize = userBlogs.map(blog => {
-            const contentLength = blog.content ? blog.content.length : 0;
-            return {
-                ...blog._doc,
-                totalSize: contentLength
-            };
-        });
+
+      
+        // Calculate the percentage of the total size relative to 1 GB
+        const percentageOf1GB = (blogCount / 100) * 100;
+
+      console.log(percentageOf1GB);
+
         res.render("admin", {
             user: req.user,
             blogs: userBlogs,
             blogCount: blogCount,
-            blogsWithSize: blogsWithSize,
+            Tpercentage: percentageOf1GB // Pass the percentage to the template, rounded to 2 decimal places
         });
     } catch (error) {
         console.error('Error fetching blogs:', error);
         res.status(500).send('Internal Server Error');
     }
 });
+
+
 
 app.get('/admin/registered_user', async (req, res) => {
     try {
