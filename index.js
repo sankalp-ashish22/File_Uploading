@@ -91,8 +91,10 @@ app.get('/admin/homepage', checkForAuthenticationCookie('token'), async (req, re
 
 app.get('/admin/registered_user', async (req, res) => {
     try {
-        const users = await User.find({}); // Fetch all users from database
-        res.render('registered_user', { users: users }); // Render 'registered_user' view with users data
+        const userBlogs = await Blog.find({});
+        const blogCount = userBlogs.length;
+        const users = await User.find({role:"USER"}); // Fetch all users from database
+        res.render('registered_user', { users: users, blogCount: blogCount }); // Render 'registered_user' view with users data
     } catch (error) {
         console.error('Error fetching users:', error);
         res.status(500).json({ error: 'Internal Server Error' });

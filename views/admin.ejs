@@ -748,7 +748,7 @@ body.loading .loader-container {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin: 20px;
+    margin: 10px;
     position: relative;
 }
 
@@ -807,6 +807,43 @@ body.loading .loader-container {
 }
 
 
+/* Existing card styles */
+
+#user-info-card .card-body {
+    display: flex;
+    align-items: center; /* Center align items vertically */
+    justify-content: space-between; /* Distribute space between items */
+}
+
+#user-info-card .info-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensure space between text and image */
+    width: 100%; /* Ensure full width */
+}
+
+#user-info-card .text-container {
+    flex: 1; /* Take up remaining space */
+}
+
+#user-info-card .card-title {
+    font-size: 1.25rem;
+    margin: 0; /* Remove margin for better alignment */
+}
+
+#user-info-card .card-text {
+    margin: 0; /* Remove margin to be directly below the heading */
+}
+
+#user-info-card .image-container {
+    margin-left: auto; /* Move image to the rightmost side */
+}
+
+#user-info-card .card-image {
+    max-width: 80px; /* Adjust image size */
+    max-height: 80px;
+}
+
 
 
 
@@ -828,7 +865,7 @@ body.loading .loader-container {
             <div class="logo-name"><span>File</span>Upload</div>
         </a>
         <ul class="side-menu">
-            <li><a href="/blog/add-new"><i class='bx bx-analyse'></i>Upload-data</a></li>
+            <li><a href="/admin/registered_user"><i class='bx bx-group'></i>User info</a></li>
             <li class="active"><a href="#"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
             <li><a href="#"><i class='bx bx-task'></i>BlogCount - <%=blogCount%></a></li>
             <!-- <li><a href="#"><i class='bx bx-message-square-dots'></i>Tickets</a></li>
@@ -891,19 +928,29 @@ body.loading .loader-container {
             <div class="container">
                 <div class="data-bottom">
                     <!-- User Section -->
-                  
-                    <div class="card card-hover">
+                    <div class="card card-hover" id="user-info-card">
                         <a href="/admin/registered_user">
-                        <div class="card-body">
-                            <h5 class="card-title">User Information</h5>
-                            <p class="card-text">Check user information here...</p>
-                        </div>
-                    </a>
+                            <div class="card-body">
+                                <div class="info-container">
+                                    <div class="text-container">
+                                        <h5 class="card-title">User Information</h5>
+                                        <p class="card-text">Check user information here...</p>
+                                    </div>
+                                    <div class="image-container">
+                                        <img src="https://uxwing.com/wp-content/themes/uxwing/download/editing-user-action/attendance-icon.png" class="card-image" alt="User Information Image">
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                     
+                    
+                    
+                    
+                    
 
-<!-- Total Storage Consumed Section -->
-<div class="card card-hover">
+<!-- Total Blogs Consumed Section -->
+<div class="card card-hover" id="blogs-info-card">
     <div class="card-body">
         <div class="content-container">
             <div class="text-container">
