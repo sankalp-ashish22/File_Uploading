@@ -1,10 +1,12 @@
 const { Router } = require('express');
 const multer = require('multer');
+const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const Blog = require('../models/Blog');
 const { verifyOTP } = require('../middlewares/otpVerification');
-const { checkForAuthenticationCookie } = require('../middlewares/authentication');
+const { checkForAuthenticationCookie} = require('../middlewares/authentication'); // Ensure correct import
+
 
 const router = Router();
 
@@ -48,6 +50,7 @@ router.get('/:id', checkForAuthenticationCookie('token'), async (req, res) => {
 // Route for downloading a blog
 router.get('/download/:id', checkForAuthenticationCookie('token'), async (req, res) => {
     const { id } = req.params;
+    // console.log(id);
     const uuid = crypto.randomUUID();
     try {
         const blog = await Blog.findById(id);
@@ -78,6 +81,22 @@ router.post('/', checkForAuthenticationCookie('token'), upload.single('coverImag
         return res.redirect(`/blog/${blog._id}`);
     } catch (error) {
         console.error('Error creating blog:', error);
+        return res.status(500).send('Internal Server Error');
+    }
+});
+
+
+// Route for deleting a blog
+router.delete('/:id', checkForAuthenticationCookie('token'), async (req, res) => {
+    const { id } = req.params;
+    try {
+        const blog = await Blog.findByIdAndDelete(id);
+        if (!blog) {
+            return res.status(404).send('Blog not found');
+        }
+        res.sendStatus(204); // No Content
+    } catch (error) {
+        console.error('Error deleting blog:', error);
         return res.status(500).send('Internal Server Error');
     }
 });

@@ -1065,13 +1065,8 @@ function toggleSidebar() {
             body.classList.remove('loading');
         }, 3000);
 
-        const num = document.getElementById('percentage-text').innerHTML;
-    console.log(num);
-
-        
-  
-      
-        const storageConsumedPercentage = num; // Replace with dynamic value
+    const num = document.getElementById('percentage-text').innerHTML;      
+    const storageConsumedPercentage = num; // Replace with dynamic value
     const circleProgress = document.querySelector('.circle-progress');
     const circleText = document.getElementById('percentage-text');
     const radius = 54;

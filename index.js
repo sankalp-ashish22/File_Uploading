@@ -91,7 +91,7 @@ app.get('/admin/homepage', checkForAuthenticationCookie('token'), async (req, re
 
 
 
-app.get('/admin/registered_user', async (req, res) => {
+app.get('/admin/registered_user', checkForAuthenticationCookie('token'),async (req, res) => {
     try {
         const userBlogs = await Blog.find({});
         const blogCount = userBlogs.length;
@@ -103,7 +103,7 @@ app.get('/admin/registered_user', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-app.delete('/admin/registered_user/:userId', async (req, res) => {
+app.delete('/admin/registered_user/:userId', checkForAuthenticationCookie('token'),async (req, res) => {
     const userId = req.params.userId;
 
     try {
@@ -119,7 +119,7 @@ app.delete('/admin/registered_user/:userId', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-app.get('/admin/registered_user/:userId/blogs', async (req, res) => {
+app.get('/admin/registered_user/:userId/blogs', checkForAuthenticationCookie('token'),async (req, res) => {
     const userId = req.params.userId;
 
     try {
@@ -132,6 +132,32 @@ app.get('/admin/registered_user/:userId/blogs', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+app.get('/admin/registered_user/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const blog = await Blog.findById(id);
+        if (!blog || !blog.coverImageURL) {
+            return res.status(404).send('File not found');
+        }
+
+        const filePath = path.resolve(`./public/${blog.coverImageURL}`);
+        console.log('File path:', filePath); // Debugging: Check the file path in console
+
+        res.download(filePath, (err) => {
+            if (err) {
+                console.error('Error downloading file:', err);
+                return res.status(500).send('Error downloading file');
+            } else {
+                console.log('File downloaded successfully:', filePath);
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching blog:', error);
+        return res.status(500).send('Internal Server Error');
+    }
+});
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server started at PORT: ${PORT}`);
