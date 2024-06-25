@@ -68,7 +68,8 @@ app.get('/admin/homepage', checkForAuthenticationCookie('token'), async (req, re
     try {
         const userBlogs = await Blog.find({ });
         const blogCount = userBlogs.length;
-
+        const users = await User.find({role:"USER"});
+        const userCount = users.length;
       
         // Calculate the percentage of the total size relative to 1 GB
         const percentageOf1GB = (blogCount / 100) * 100;
@@ -79,7 +80,8 @@ app.get('/admin/homepage', checkForAuthenticationCookie('token'), async (req, re
             user: req.user,
             blogs: userBlogs,
             blogCount: blogCount,
-            Tpercentage: percentageOf1GB // Pass the percentage to the template, rounded to 2 decimal places
+            Tpercentage: percentageOf1GB, // Pass the percentage to the template, rounded to 2 decimal places
+            userCount: userCount,
         });
     } catch (error) {
         console.error('Error fetching blogs:', error);
@@ -94,7 +96,8 @@ app.get('/admin/registered_user', async (req, res) => {
         const userBlogs = await Blog.find({});
         const blogCount = userBlogs.length;
         const users = await User.find({role:"USER"}); // Fetch all users from database
-        res.render('registered_user', { users: users, blogCount: blogCount }); // Render 'registered_user' view with users data
+        const userCount = users.length;
+        res.render('registered_user', { users: users, blogCount: blogCount, userCount: userCount }); // Render 'registered_user' view with users data
     } catch (error) {
         console.error('Error fetching users:', error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -113,6 +116,19 @@ app.delete('/admin/registered_user/:userId', async (req, res) => {
         res.sendStatus(204); // Send success response
     } catch (error) {
         console.error('Error deleting user and blogs:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+app.get('/admin/registered_user/:userId/blogs', async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        // Fetch all blogs of the user
+        const userBlogs = await Blog.find({ createdBy: userId });
+
+        res.json(userBlogs); // Send user's blogs as JSON response
+    } catch (error) {
+        console.error('Error fetching user blogs:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
