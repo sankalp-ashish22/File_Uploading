@@ -100,6 +100,22 @@ app.get('/admin/registered_user', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+app.delete('/admin/registered_user/:userId', async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        // Delete user
+        await User.findByIdAndDelete(userId);
+
+        // Delete blogs associated with the user
+        await Blog.deleteMany({ createdBy: userId });
+
+        res.sendStatus(204); // Send success response
+    } catch (error) {
+        console.error('Error deleting user and blogs:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server started at PORT: ${PORT}`);
