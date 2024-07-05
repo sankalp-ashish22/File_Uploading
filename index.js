@@ -140,7 +140,7 @@ app.get('/admin/registered_user/:id', async (req, res) => {
         if (!blog || !blog.coverImageURL) {
             return res.status(404).send('File not found');
         }
-
+            
         const filePath = path.resolve(`./public/${blog.coverImageURL}`);
         console.log('File path:', filePath); // Debugging: Check the file path in console
 
