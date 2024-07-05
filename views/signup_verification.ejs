@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+  <style>
+    .error-message {
+      color: red;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    .loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensure it's above other content */
+    opacity: 0; /* Initially hidden */
+    pointer-events: none; /* Prevent interaction when hidden */
+    transition: opacity 0.3s ease; /* Smooth transition for visibility */
+}
+    .loader {
+    border: 4px solid transparent; /* Transparent border */
+    border-top: 4px solid #3498db; /* Blue top border */
+    border-bottom: 4px solid #ffffff; /* White bottom border */
+    border-radius: 50%; /* Circle shape */
+    width: 40px;
+    height: 40px;
+    animation: spin 0.8s linear infinite; /* Rotation animation */
+}
+.heading{
+text-align: center;
+
+margin-bottom: 5px;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+body.loading .loader-container {
+    opacity: 1; /* Show loader when body has 'loading' class */
+    pointer-events: auto; /* Allow interaction when loader is visible */
+}
+#otp-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+           
+        }
+
+        #otp-container input {
+            width: 44px;
+            height: 40px;
+            font-size: 24px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #ffffff;
+            color:black;
+        }
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            #otp-container {
+                gap: 5px;
+            }
+
+            #otp-container input {
+                width: 44px;
+                height: 35px;
+                font-size: 20px;
+            }
+
+            button {
+                width: 100%;
+            }
+          
+        }
+  </style>
+</head>
+
+<body class="loading">
+    <div class="loader-container">
+        <div class="loader"></div>
+    </div>
+  <section class="container">
+    <div class="login-container">
+      <div class="circle circle-one"></div>
+      <div class="form-container">
+        
+        <h1 >CREATE ACCOUNT</h1>
+       
+        <form id="OTPFORM1" action="/signup/verification" method="post">
+          <div class="mt-2">
+            <div class="mb-2">
+              <input type="text" id="fullName" name="fullName" aria-describedby="fullName" placeholder="Name" />
+            </div>
+            <div class="mb-2">
+              <input type="email" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email" />
+            </div>
+            <div class="mb-2">
+              <input type="password" name="password" id="exampleInputPassword1" placeholder="Password" />
+            </div>
+            <h2 class="heading">ENTER OTP</h2>
+            <div id="otp-container">
+                <input type="text" name="otp1" maxlength="1" required>
+                <input type="text" name="otp2" maxlength="1" required>
+                <input type="text" name="otp3" maxlength="1" required>
+                <input type="text" name="otp4" maxlength="1" required>
+                <input type="text" name="otp5" maxlength="1" required>
+                <input type="text" name="otp6" maxlength="1" required>
+            </div>
+            <input type="hidden" id="otp" name="otp">
+            <button type="submit">Verify Account</button>
+        
+          </div>
+        </form>
+        <div class="register-forget opacity">
+          <a href="/user/signin">SIGN IN</a>
+          <a href="">FORGOT PASSWORD</a>
+        </div>
+      </div>
+      <div class="circle circle-two"></div>
+    </div>
+  </section>
+  <script src="/js/script.js"></script>
+  <script>
+    document.getElementById('OTPFORM1').addEventListener('submit', function(event) {
+        // Concatenate OTP values
+        const otpInputs = document.querySelectorAll('#otp-container input');
+        let otpValue = '';
+        otpInputs.forEach(input => {
+            otpValue += input.value;
+        });
+        document.getElementById('otp').value = otpValue;
+    });
+
+    // Auto-focus on the next OTP input field
+    const otpInputs = document.querySelectorAll('#otp-container input');
+    otpInputs.forEach((input, index) => {
+        input.addEventListener('input', () => {
+            if (input.value.length === input.maxLength && index < otpInputs.length - 1) {
+                otpInputs[index + 1].focus();
+            }
+        });
+
+        // Handle backspace to focus on the previous field
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && input.value === '' && index > 0) {
+                otpInputs[index - 1].focus();
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const body = document.body;
+
+        // Remove 'loading' class after window load (simulated delay for demo)
+        window.addEventListener('load', () => {
+            body.classList.remove('loading');
+        });
+
+        // Optional: Simulate a delay (e.g., 3 seconds) for demonstration
+        setTimeout(() => {
+            body.classList.remove('loading');
+        }, 3000);
+    });
+  </script>
+</body>
+
+</html>

@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const userRoute = require('./routes/user');
 const blogRoute = require("./routes/blog");
 const otpRoute = require("./routes/otp");
+const upotp = require("./models/upotp")
 const { checkForAuthenticationCookie } = require("./middlewares/authentication");
 const client = require("./client");
 const app = express();
@@ -74,7 +75,7 @@ app.get('/admin/homepage', checkForAuthenticationCookie('token'), async (req, re
         // Calculate the percentage of the total size relative to 1 GB
         const percentageOf1GB = (blogCount / 100) * 100;
 
-      console.log(percentageOf1GB);
+    
 
         res.render("admin", {
             user: req.user,
@@ -158,6 +159,42 @@ app.get('/admin/registered_user/:id', async (req, res) => {
     }
 });
 
+
+
+app.get("/signup/verify",(req,res)=>{
+    res.render("signup_verification");
+})
+
+app.post("/signup/verification",async (req,res)=>{
+    console.log(req.body);
+    const {fullName,email,password,otp} = req.body;
+   
+    const storedOtp = await upotp.findOne({ otp }).sort({ createdAt: -1 });
+    if (!storedOtp || storedOtp.otp !== otp) {
+        const errorMessage = 'Invalid or expired OTP';
+        return res.redirect("/user/signup");
+    }
+    try {
+        const newUser = await User.create({
+            fullName,
+            email,
+            password,
+        });
+        console.log("User created successfully:", newUser);
+        return res.redirect("/user/signin");
+       
+    } catch (error) {
+        if (error.code === 11000) {
+            console.error("Email already exists:", email);
+            return res.status(400).render("signup", { error: "Email already exists" });
+        } else {
+            console.error("Error during user creation:", error);
+            return res.status(500).render("signup", { error: "Internal Server Error" });
+        }
+    }
+   
+    
+})
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server started at PORT: ${PORT}`);

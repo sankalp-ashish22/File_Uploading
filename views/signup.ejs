@@ -6,6 +6,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Signup</title>
+  <style>
+    .error-message {
+      color: red;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 
 <body>
@@ -15,6 +22,7 @@
       <div class="form-container">
         <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png" alt="illustration" class="illustration" />
         <h1 class="opacity1">CREATE ACCOUNT</h1>
+       
         <form action="/user/signup" method="post">
           <div class="mt-2">
             <div class="mb-3">
@@ -26,6 +34,9 @@
             <div class="mb-3">
               <input type="password" name="password" id="exampleInputPassword1" placeholder="Password" />
             </div>
+            <% if (error) { %>
+              <div class="error-message"><%= error %></div>
+            <% } %>
             <button type="submit" class="btn btn-primary">Sign Up</button>
           </div>
         </form>
