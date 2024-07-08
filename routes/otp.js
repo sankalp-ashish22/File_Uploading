@@ -47,7 +47,7 @@ Sankalp Ashish `,
             return res.status(500).send('Error sending email');
         }
 
-        res.redirect(`/otp/verify?blogId=${blogId}&uuid=${uuid}`);
+        res.redirect(`/otp/verify/${uuid}?blogId=${blogId}&uuid=${uuid}`);
     });
 }
 
@@ -61,10 +61,17 @@ function getHashKey(search_mail) {
     return crypto.createHash('sha256').update(JSON.stringify(search_mail)).digest('hex');
 }
 
-router.get('/request/:uuid', (req, res) => {
+router.get('/request/:uuid', async (req, res) => {
     const { blogId, uuid, errorMessage } = req.query;
     const { uuid: requestUuid } = req.params;
-    res.render('otpRequest', { blogId, uuid: requestUuid, errorMessage: errorMessage || null });
+    const x =await client.get(blogId);
+
+    
+    if(x==JSON.stringify(uuid)){
+       
+        res.render('otpRequest', { blogId, uuid: requestUuid, errorMessage: errorMessage || null });
+    }
+    return res.render("error");
 });
 
 router.post('/generate', async (req, res) => {
@@ -86,19 +93,28 @@ router.post('/generate', async (req, res) => {
     otpgenerator(email, blogId, uuid, res);
 });
 
-router.get('/verify', (req, res) => {
+router.get('/verify/:uuid', async(req, res) => {
     const { blogId, uuid, errorMessage } = req.query;
-    res.render('otpVerify', { blogId, uuid, errorMessage: errorMessage || null });
+    const x =await client.get(blogId);
+    if(x==JSON.stringify(uuid)){
+        res.render('otpVerify', { blogId, uuid, errorMessage: errorMessage || null });
+    }
+    else {
+        return res.render("error");
+    }
+    
 });
 
-router.post('/verify', async (req, res) => {
+router.post('/verify/:uuid', async (req, res) => {
     const { email, otp, blogId } = req.body;
     const { uuid } = req.query;
-
-    const storedOtp = await Otp.findOne({ email }).sort({ createdAt: -1 });
+    const x =await client.get(blogId);
+  
+    if(x==JSON.stringify(uuid)){
+        const storedOtp = await Otp.findOne({ email }).sort({ createdAt: -1 });
     if (!storedOtp || storedOtp.otp !== otp) {
         const errorMessage = 'Invalid or expired OTP';
-        return res.redirect(`/otp/verify?blogId=${blogId}&uuid=${uuid}&errorMessage=${errorMessage}`);
+        return res.redirect(`/otp/verify${uuid}?blogId=${blogId}&uuid=${uuid}&errorMessage=${errorMessage}`);
     }
 
     try {
@@ -113,6 +129,11 @@ router.post('/verify', async (req, res) => {
         console.error('Error downloading file:', error);
         return res.status(500).send('Error downloading file');
     }
+        
+    }
+    else{
+    return res.render("error");}
+   
 });
 
 module.exports = router;

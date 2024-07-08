@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const Blog = require('../models/Blog');
 const { verifyOTP } = require('../middlewares/otpVerification');
 const { checkForAuthenticationCookie} = require('../middlewares/authentication'); // Ensure correct import
+const client = require("../client");
 
 
 const router = Router();
@@ -52,6 +53,7 @@ router.get('/download/:id', checkForAuthenticationCookie('token'), async (req, r
     const { id } = req.params;
     // console.log(id);
     const uuid = crypto.randomUUID();
+    await client.set(id, JSON.stringify(uuid), 'EX', 300);
     try {
         const blog = await Blog.findById(id);
         if (!blog) {

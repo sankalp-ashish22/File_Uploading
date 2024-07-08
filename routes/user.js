@@ -23,11 +23,11 @@ async function otpgenerator(email) {
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to: email,
-        subject: 'Your OTP for file download',
+        subject: 'User Verification',
         text: 
 `Dear User,
 
-Just one more step to download.
+Just one more step to get registered.
 
 You must confirm your identity using this one-time pass code: ${otp}
 
@@ -45,18 +45,9 @@ Sankalp Ashish `,
             return res.status(500).send('Error sending email');
         }
 
-        res.redirect(`/Upverify`);
+        res.redirect(`/signup`);
     });
 }
-
-
-
-
-
-
-
-
-
 
 
 
