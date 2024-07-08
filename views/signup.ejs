@@ -56,6 +56,7 @@
       opacity: 1;
       pointer-events: auto;
     }
+
     .register-forget {
       display: flex;
       justify-content: center;
@@ -66,8 +67,52 @@
     .register-forget a {
       text-align: center;
       text-decoration: none;
-      /* color: #ff1010; */
-      /* font-weight: bold; */
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .login-container {
+        padding: 20px;
+        max-width: 90%;
+      }
+
+      .form-container {
+        padding: 10px;
+      }
+
+      .circle-one,
+      .circle-two {
+        display: none;
+      }
+
+      .register-forget {
+        flex-direction: column;
+      }
+
+      .register-forget a {
+        margin-bottom: 10px;
+      }
+
+      .illustration {
+        width: 80px;
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="password"] {
+        padding: 8px;
+        font-size: 14px;
+      }
+
+      .btn-primary {
+        padding: 8px;
+        font-size: 14px;
+      }
     }
   </style>
 </head>
@@ -104,7 +149,6 @@
         </form>
         <div class="register-forget opacity">
           <a href="/user/signin">SIGN IN</a>
-          <!-- <a href="">FORGOT PASSWORD</a> -->
         </div>
       </div>
       <div class="circle circle-two"></div>
@@ -119,6 +163,12 @@
       window.addEventListener('load', () => {
         body.classList.remove('loading');
       });
+
+      // Clear error message on page reload
+      const errorMessage = document.querySelector('.error-message');
+      if (errorMessage) {
+        errorMessage.style.display = 'none';
+      }
     });
   </script>
 </body>

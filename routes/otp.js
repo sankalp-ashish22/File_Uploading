@@ -96,6 +96,7 @@ router.post('/generate', async (req, res) => {
 router.get('/verify/:uuid', async(req, res) => {
     const { blogId, uuid, errorMessage } = req.query;
     const x =await client.get(blogId);
+  
     if(x==JSON.stringify(uuid)){
         res.render('otpVerify', { blogId, uuid, errorMessage: errorMessage || null });
     }
@@ -110,11 +111,13 @@ router.post('/verify/:uuid', async (req, res) => {
     const { uuid } = req.query;
     const x =await client.get(blogId);
   
+  
     if(x==JSON.stringify(uuid)){
+        console
         const storedOtp = await Otp.findOne({ email }).sort({ createdAt: -1 });
     if (!storedOtp || storedOtp.otp !== otp) {
         const errorMessage = 'Invalid or expired OTP';
-        return res.redirect(`/otp/verify${uuid}?blogId=${blogId}&uuid=${uuid}&errorMessage=${errorMessage}`);
+        return res.redirect(`/otp/verify/${uuid}?blogId=${blogId}&uuid=${uuid}&errorMessage=${errorMessage}`);
     }
 
     try {

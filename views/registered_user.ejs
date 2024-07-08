@@ -1118,7 +1118,7 @@ body.loading .loader-container {
     });
 
     function deleteUser(userId) {
-        if (confirm("Are you sure you want to delete this user and their blogs?")) {
+        if (confirm("Are you sure you want to delete this user and their files?")) {
             fetch(`/admin/registered_user/${userId}`, {
                 method: 'DELETE'
             })

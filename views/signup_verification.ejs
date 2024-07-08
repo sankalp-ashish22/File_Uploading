@@ -13,80 +13,67 @@
       font-size: 16px;
       margin-bottom: 20px;
     }
+
     .loader-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999; /* Ensure it's above other content */
-    opacity: 0; /* Initially hidden */
-    pointer-events: none; /* Prevent interaction when hidden */
-    transition: opacity 0.3s ease; /* Smooth transition for visibility */
-}
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
     .loader {
-    border: 4px solid transparent; /* Transparent border */
-    border-top: 4px solid #3498db; /* Blue top border */
-    border-bottom: 4px solid #ffffff; /* White bottom border */
-    border-radius: 50%; /* Circle shape */
-    width: 40px;
-    height: 40px;
-    animation: spin 0.8s linear infinite; /* Rotation animation */
-}
-.heading{
-text-align: center;
+      border: 4px solid transparent;
+      border-top: 4px solid #3498db;
+      border-bottom: 4px solid #ffffff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 0.8s linear infinite;
+    }
 
-margin-bottom: 5px;
-}
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
 
-body.loading .loader-container {
-    opacity: 1; /* Show loader when body has 'loading' class */
-    pointer-events: auto; /* Allow interaction when loader is visible */
-}
-#otp-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 10px 0;
-           
-        }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
 
-        #otp-container input {
-            width: 44px;
-            height: 40px;
-            font-size: 24px;
-            text-align: center;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #ffffff;
-            color:black;
-        }
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            #otp-container {
-                gap: 5px;
-            }
+    body.loading .loader-container {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
-            #otp-container input {
-                width: 44px;
-                height: 35px;
-                font-size: 20px;
-            }
+    #otp-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
 
-            button {
-                width: 100%;
-            }
-          
-        }
-        .register-forget {
+    #otp-container input {
+      width: 44px;
+      height: 25px;
+      font-size: 24px;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #ffffff;
+      color: black;
+    }
+
+    .register-forget {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -96,23 +83,92 @@ body.loading .loader-container {
     .register-forget a {
       text-align: center;
       text-decoration: none;
-      /* color: #50fc06; */
-      /* font-weight: bold; */
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .login-container {
+        padding: 20px;
+        max-width: 90%;
+      }
+
+      .form-container {
+        padding: 10px;
+      }
+
+      .circle-one,
+      .circle-two {
+        display: none;
+      }
+
+      .register-forget {
+        flex-direction: column;
+      }
+
+      .register-forget a {
+        margin-bottom: 10px;
+      }
+
+      .illustration {
+        width: 80px;
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      #otp-container input {
+        padding: 8px;
+        font-size: 14px;
+      }
+
+      .btn-primary {
+        padding: 8px;
+        font-size: 14px;
+      }
+
+      #otp-container {
+        gap: 5px;
+      }
+
+      #otp-container input {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+
+    /* Ensure the form fits within the screen */
+    form {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .mt-2,
+    .mb-2 {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
     }
   </style>
 </head>
 
 <body class="loading">
-    <div class="loader-container">
-        <div class="loader"></div>
-    </div>
+  <div class="loader-container">
+    <div class="loader"></div>
+  </div>
   <section class="container">
     <div class="login-container">
       <div class="circle circle-one"></div>
       <div class="form-container">
-        
-        <h1 >CREATE ACCOUNT</h1>
-       
+        <h1>CREATE ACCOUNT</h1>
         <form id="OTPFORM1" action="/signup/verification" method="post">
           <div class="mt-2">
             <div class="mb-2">
@@ -126,21 +182,19 @@ body.loading .loader-container {
             </div>
             <h2 class="heading">ENTER OTP</h2>
             <div id="otp-container">
-                <input type="text" name="otp1" maxlength="1" required>
-                <input type="text" name="otp2" maxlength="1" required>
-                <input type="text" name="otp3" maxlength="1" required>
-                <input type="text" name="otp4" maxlength="1" required>
-                <input type="text" name="otp5" maxlength="1" required>
-                <input type="text" name="otp6" maxlength="1" required>
+              <input type="text" name="otp1" maxlength="1" required>
+              <input type="text" name="otp2" maxlength="1" required>
+              <input type="text" name="otp3" maxlength="1" required>
+              <input type="text" name="otp4" maxlength="1" required>
+              <input type="text" name="otp5" maxlength="1" required>
+              <input type="text" name="otp6" maxlength="1" required>
             </div>
             <input type="hidden" id="otp" name="otp">
             <button type="submit">Verify Account</button>
-        
           </div>
         </form>
         <div class="register-forget opacity">
           <a href="/user/signin">SIGN IN</a>
-          <!-- <a href="">FORGOT PASSWORD</a> -->
         </div>
       </div>
       <div class="circle circle-two"></div>
@@ -149,44 +203,44 @@ body.loading .loader-container {
   <script src="/js/script.js"></script>
   <script>
     document.getElementById('OTPFORM1').addEventListener('submit', function(event) {
-        // Concatenate OTP values
-        const otpInputs = document.querySelectorAll('#otp-container input');
-        let otpValue = '';
-        otpInputs.forEach(input => {
-            otpValue += input.value;
-        });
-        document.getElementById('otp').value = otpValue;
+      // Concatenate OTP values
+      const otpInputs = document.querySelectorAll('#otp-container input');
+      let otpValue = '';
+      otpInputs.forEach(input => {
+        otpValue += input.value;
+      });
+      document.getElementById('otp').value = otpValue;
     });
 
     // Auto-focus on the next OTP input field
     const otpInputs = document.querySelectorAll('#otp-container input');
     otpInputs.forEach((input, index) => {
-        input.addEventListener('input', () => {
-            if (input.value.length === input.maxLength && index < otpInputs.length - 1) {
-                otpInputs[index + 1].focus();
-            }
-        });
+      input.addEventListener('input', () => {
+        if (input.value.length === input.maxLength && index < otpInputs.length - 1) {
+          otpInputs[index + 1].focus();
+        }
+      });
 
-        // Handle backspace to focus on the previous field
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Backspace' && input.value === '' && index > 0) {
-                otpInputs[index - 1].focus();
-            }
-        });
+      // Handle backspace to focus on the previous field
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && input.value === '' && index > 0) {
+          otpInputs[index - 1].focus();
+        }
+      });
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-        const body = document.body;
+      const body = document.body;
 
-        // Remove 'loading' class after window load (simulated delay for demo)
-        window.addEventListener('load', () => {
-            body.classList.remove('loading');
-        });
+      // Remove 'loading' class after window load (simulated delay for demo)
+      window.addEventListener('load', () => {
+        body.classList.remove('loading');
+      });
 
-        // Optional: Simulate a delay (e.g., 3 seconds) for demonstration
-        setTimeout(() => {
-            body.classList.remove('loading');
-        }, 3000);
+      // Optional: Simulate a delay (e.g., 3 seconds) for demonstration
+      setTimeout(() => {
+        body.classList.remove('loading');
+      }, 3000);
     });
   </script>
 </body>

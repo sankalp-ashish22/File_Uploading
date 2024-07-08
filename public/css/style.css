@@ -10,13 +10,17 @@
 
 html {
     scroll-behavior: smooth;
+    margin: 0;
+    height:100%;
 }
 
 body {
     background-image: url("../images/test3_bg.png");
     background-size: cover;
     margin: 0;
+    height:100%;
     box-sizing: border-box;
+    
     font-family: "Poppins", sans-serif;
     color: var(--color);
     letter-spacing: 1px;

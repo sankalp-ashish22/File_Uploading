@@ -217,7 +217,7 @@ body.loading .loader-container {
     </div>
     <div class="container">
         <h1 id="verify">Verify OTP</h1>
-        <form id="otpForm" action="/otp/verify" method="post">
+        <form id="otpForm" action="/otp/verify/<%= uuid %>?blogId=<%= blogId %>&uuid=<%= uuid %>" method="post">
             <input type="hidden" name="blogId" value="<%= blogId %>">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
