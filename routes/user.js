@@ -82,19 +82,26 @@ router.get("/logout", (req, res) => {
 
 router.post('/signup', async (req, res) => {
     const { fullName, email, password } = req.body;
-    
-    
+
+    // Check if any required field is missing
+    if (!fullName || !email || !password) {
+        console.error("Missing required fields:", req.body);
+        return res.status(400).render("signup", { error: "All fields are required" });
+    }
+
     try {
-          // Check if email already exists in the database
-          const user = await User.findOne({ email });
-          if (user) {
-              console.error("Email already exists:", email);
-              return res.status(400).render("signup", { error: "Email already exists" }); // Set error here
-          }
-        otpgenerator(email);
-       
+        // Check if email already exists in the database
+        const user = await User.findOne({ email });
+        if (user) {
+            console.error("Email already exists:", email);
+            return res.status(400).render("signup", { error: "Email already exists" });
+        }
+
+        // Generate OTP and send email
+        await otpgenerator(email);
+
         return res.redirect("/signup/verify");
-       
+
     } catch (error) {
         if (error.code === 11000) {
             console.error("Email already exists:", email);
@@ -105,6 +112,7 @@ router.post('/signup', async (req, res) => {
         }
     }
 });
+
 
 
 
