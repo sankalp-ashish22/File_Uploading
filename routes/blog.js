@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage }).array('coverImage', 10); // 'coverImages' is the field name for multiple files
 
 // Route for viewing a specific blog by ID
 router.get('/:id', checkForAuthenticationCookie('token'), async (req, res) => {
@@ -71,21 +71,39 @@ router.get('/download/:id', checkForAuthenticationCookie('token'), async (req, r
 });
 
 // Route for creating a new blog
-router.post('/', checkForAuthenticationCookie('token'), upload.single('coverImage'), async (req, res) => {
-    try {
-        const { title } = req.body;
-        const blog = await Blog.create({
-            title,
-            createdBy: req.user._id,  // Ensure createdBy is set to the authenticated user's ID
-            coverImageURL: `uploads/${req.file.filename}`,
-        });
+router.post('/', checkForAuthenticationCookie('token'), (req, res) => {
+    upload(req, res, async (err) => {
+        if (err instanceof multer.MulterError) {
+            console.error('Multer Error:', err);
+            return res.status(500).send('Internal Server Error');
+        } else if (err) {
+            console.error('Unknown Error:', err);
+            return res.status(500).send('Internal Server Error');
+        }
 
-        return res.redirect(`/blog/${blog._id}`);
-    } catch (error) {
-        console.error('Error creating blog:', error);
-        return res.status(500).send('Internal Server Error');
-    }
+        try {
+            const { title } = req.body;
+            const files = req.files;
+
+            // Assuming you want to create a blog entry for each uploaded file
+            const blogPromises = files.map(async file => {
+                const blog = await Blog.create({
+                    title,
+                    createdBy: req.user._id,
+                    coverImageURL: `uploads/${file.filename}`,
+                });
+                return blog;
+            });
+
+            const createdBlogs = await Promise.all(blogPromises);
+            return res.redirect("/");
+        } catch (error) {
+            console.error('Error creating blog:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+    });
 });
+
 
 
 // Route for deleting a blog

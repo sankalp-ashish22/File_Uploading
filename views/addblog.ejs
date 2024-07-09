@@ -672,8 +672,9 @@ body.loading .loader-container {
                         <form action="/blog" method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label for="coverImage" class="text-upload">Cover Image:</label>
-                                <input type="file" id="coverImage" name="coverImage" required>
+                                <input type="file" id="coverImage" name="coverImage" multiple required>
                             </div>
+                            <button type="button" id="addFileInput">Add More Files+</button>
                             <div class="form-group">
                                 <label for="title" class="text-upload">Title:</label>
                                 <input type="text" id="title" name="title" required>
@@ -687,6 +688,17 @@ body.loading .loader-container {
     </div>
 
     <script>
+  document.getElementById('addFileInput').addEventListener('click', function() {
+        var newInput = document.createElement('input');
+        newInput.type = 'file';
+        newInput.name = 'coverImage'; // Set the correct name for the input
+        newInput.multiple = true;
+        
+        // Append the new input after the existing one
+        var fileInputsContainer = document.getElementById('coverImage').parentNode;
+        fileInputsContainer.appendChild(newInput);
+    });
+
         // JavaScript to handle sidebar toggle
         const sidebar = document.querySelector('.sidebar');
         const menuButton = document.querySelector('.toggle-icon');
