@@ -139,11 +139,11 @@
             <div class="mb-3">
               <input type="password" name="password" id="exampleInputPassword1" placeholder="Password" />
             </div>
-            <% if (error) { %>
-            <div class="error-message">
-              <%= error %>
-            </div>
-            <% } %>
+            <% if (error) { console.log(error); %>
+              <div class="error-message" id="error">
+                <%= error %>
+              </div>
+              <% } %>
             <button type="submit" class="btn btn-primary">Sign Up</button>
           </div>
         </form>
@@ -164,11 +164,7 @@
         body.classList.remove('loading');
       });
 
-      // Clear error message on page reload
-      const errorMessage = document.querySelector('.error-message');
-      if (errorMessage) {
-        errorMessage.style.display = 'none';
-      }
+
     });
   </script>
 </body>
