@@ -195,6 +195,71 @@ app.post("/signup/verification",async (req,res)=>{
    
     
 })
+
+// Adjusting the fetch endpoint to handle errors
+app.get('/admin/registered_user/:userId/downloaded_blogs', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findById(userId).populate('downloadFiles.blogId');
+
+        if (!user || !user.downloadFiles) {
+            return res.status(404).json({ error: 'User or downloaded files not found' });
+        }
+       console.log(user.downloadFiles);
+        const downloadedBlogs = user.downloadFiles.map(download => ({
+            
+            blogId: download.blogId ||'N/A',
+            blogTitle: download.blogTitle || 'N/A', // Ensure blogTitle is included
+            timestamp: download.timestamp || 'N/A',
+        }));
+
+        res.json(downloadedBlogs);
+    } catch (error) {
+        console.error('Error fetching downloaded blogs:', error);
+        res.status(500).json({ error: 'Failed to fetch downloaded blogs' });
+    }
+});
+
+// Route for downloading a blog
+app.get('/admin/registered_user/:blogId/download', async (req, res) => {
+    const { blogId } = req.params;
+
+    try {
+        // Here, fetch the blog details from your database
+        const blog = await Blog.findById(blogId);
+
+        if (!blog || !blog.coverImageURL) {
+            return res.status(404).send('File not found');
+        }
+
+        // Construct the file path where the blog file is stored (adjust as per your file structure)
+        const filePath = path.resolve(`./public/${blog.coverImageURL}`);
+
+        // Check if the file exists
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).send('File not found');
+        }
+
+        // Serve the file for download
+        res.download(filePath, `blog_${blogId}.pdf`, (err) => {
+            if (err) {
+                console.error('Error downloading file:', err);
+                return res.status(500).send('Error downloading file');
+            } else {
+                console.log('File downloaded successfully:', filePath);
+            }
+        });
+
+    } catch (error) {
+        console.error('Error fetching blog:', error);
+        return res.status(500).send('Internal Server Error');
+    }
+});
+
+
+
+
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server started at PORT: ${PORT}`);

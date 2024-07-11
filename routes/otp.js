@@ -123,15 +123,43 @@ router.post('/verify/:uuid', async (req, res) => {
     try {
         const blog = await Blog.findById(blogId);
         if (!blog || !blog.coverImageURL) {
-            return res.status(404).send('File not found');
+          return res.status(404).send('File not found');
         }
-
+    
         const filePath = path.resolve(`./public/${blog.coverImageURL}`);
-        res.download(filePath);
-    } catch (error) {
+        res.download(filePath, async (err) => {
+          if (err) {
+            console.error('Error downloading file:', err);
+            return res.status(500).send('Error downloading file');
+          } else {
+            try {
+              const user = await User.findOne({ email: email });
+              if (!user) {
+                return res.status(404).send('User not found');
+              }
+    
+              if (!Array.isArray(user.downloadFiles)) {
+                user.downloadFiles = [];
+              }
+    
+              user.downloadFiles.push({
+                blogId: blogId,
+                blogTitle: blog.title,
+                timestamp: new Date(),
+              });
+    
+              await user.save();
+              console.log('Download entry added successfully:', user.downloadFiles);
+            } catch (error) {
+              console.error('Error saving download entry:', error);
+              // Do not send another response as the file is already sent successfully
+            }
+          }
+        });
+      } catch (error) {
         console.error('Error downloading file:', error);
         return res.status(500).send('Error downloading file');
-    }
+      }
         
     }
     else{

@@ -2,6 +2,23 @@ const { createHmac, randomBytes } = require('node:crypto'); // HMAC for hashing
 const { Schema, model } = require('mongoose');
 const { createTokenForUser } = require('../services/authentication');
 
+
+const downloadedBySchema = new Schema({
+    blogId: {
+      type: String,
+   
+    },
+    blogTitle: {
+        type: String,
+    },
+    timestamp: {
+      type: Date,
+      
+      default: Date.now,
+    },
+  });
+
+
 // User Schema
 const userSchema = new Schema({
     fullName: {
@@ -15,7 +32,6 @@ const userSchema = new Schema({
     },
     salt: {
         type: String,
-        
     },
     password: {
         type: String,
@@ -29,6 +45,9 @@ const userSchema = new Schema({
         type: String,
         enum: ["USER", "ADMIN"],
         default: "USER",
+    },
+    downloadFiles:{
+        type: [downloadedBySchema],
     },
 }, { timestamps: true });
 

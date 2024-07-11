@@ -784,7 +784,7 @@ body.loading .loader-container {
     margin-right: 20px;
 }
 
-.btn-success, .btn-danger {
+.btn-success, .btn-danger, .btn-btn-success {
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
@@ -799,6 +799,13 @@ body.loading .loader-container {
 
 .btn-success:hover {
     background: #1c7206;
+}
+.btn-btn-success {
+    background: var(--primary);
+}
+
+.btn-btn-success:hover {
+    background: #022082;
 }
 
 .btn-danger {
@@ -906,6 +913,54 @@ body.loading .loader-container {
 .color_blue{
     color:#0056b3
 }
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.blog-item {
+    margin-bottom: 10px; /* Adjust as needed */
+}
+/* CSS for the download button */
+.download-button {
+    cursor: pointer;
+}
+
+/* CSS for hover effect */
+.download-button:hover {
+    cursor: pointer;
+}
 
 
     </style>
@@ -1002,6 +1057,16 @@ body.loading .loader-container {
     </div>
 </div>
 
+<!-- Modal -->
+<div id="downloadModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeDownloadModal()">&times;</span>
+      <h2>Downloaded<span class="color_blue"> Files</span></h2>
+      <hr> <!-- Horizontal line after heading -->
+      <div id="downloadedBlogsContainer"></div>
+    </div>
+  </div>
+  
 
 
 
@@ -1016,7 +1081,11 @@ body.loading .loader-container {
                                 <p class="card-text" style="display: inline; margin-right: 20px;">Email: <%= user.email %></p>
                             </div>
                             <div class="user-actions" style="white-space: nowrap;">
-                                <a href="#" class="btn btn-success equal-btn" onclick="viewUserBlogs('<%= user._id %>')"><i class="fas fa-eye"></i> View</a>
+                                <a href="#" class="btn btn-btn-success equal-btn" onclick="viewUserBlogs('<%= user._id %>')"><i class="fas fa-eye"></i>Uploaded Files</a>
+                                <span style="margin-left: 10px;"></span>
+                                <a href="#" class="btn btn-success equal-btn" onclick="openDownloadModal('<%= user._id %>')">
+                                    <i class="fas fa-eye"></i> Downloaded Files
+                                  </a>
                                 <span style="margin-left: 10px;"></span>
                                 <a href="#" class="btn btn-danger equal-btn" onclick="deleteUser('<%= user._id %>')"><i class="fas fa-trash"></i> Delete</a>
                             </div>
@@ -1045,6 +1114,89 @@ body.loading .loader-container {
     </div>
     <script>
         // JavaScript Code (index.js)
+// Frontend JavaScript to open modal and fetch downloaded blogs
+// Function to open the download modal
+function openDownloadModal(userId) {
+    const modal = document.getElementById('downloadModal');
+
+    fetch(`/admin/registered_user/${userId}/downloaded_blogs`)
+        .then(response => response.json())
+        .then(data => {
+            const downloadedBlogsContainer = document.getElementById('downloadedBlogsContainer');
+            downloadedBlogsContainer.innerHTML = ''; // Clear previous content
+            data.forEach(download => {
+                const blogDiv = document.createElement('div');
+                blogDiv.classList.add('blog-item');
+                blogDiv.setAttribute('data-id', download.blogId);
+                
+                const titleElement = document.createElement('h3');
+                titleElement.innerHTML = `<strong>${download.blogTitle}</strong>`; // Bold title
+               
+                const timestampElement = document.createElement('p');
+                const timestamp = new Date(download.timestamp).toLocaleString(); // Format timestamp
+                timestampElement.textContent = `- Downloaded on: ${timestamp}`;
+
+                const downloadButton = document.createElement('button');
+                downloadButton.textContent = 'Download';
+                downloadButton.classList.add('btn', 'btn-success', 'download-button'); // Add button styles
+                downloadButton.addEventListener('click', () => downloadBlog(download.blogId));
+
+                blogDiv.appendChild(titleElement);
+                blogDiv.appendChild(timestampElement);
+                blogDiv.appendChild(downloadButton);
+                downloadedBlogsContainer.appendChild(blogDiv);
+
+                const hr = document.createElement('hr');
+                downloadedBlogsContainer.appendChild(hr);
+            });
+            modal.style.display = 'block'; // Display the modal
+
+            // Close modal on outside click
+            const closeOnOutsideClick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    window.removeEventListener('click', closeOnOutsideClick); // Remove event listener after closing
+                }
+            };
+
+            // Add event listener to window for outside click
+            window.addEventListener('click', closeOnOutsideClick);
+        })
+        .catch(error => {
+            console.error('Error fetching downloaded blogs:', error);
+            alert('Failed to fetch downloaded blogs');
+        });
+}
+
+// Function to close the download modal
+function closeDownloadModal() {
+    const modal = document.getElementById('downloadModal');
+    modal.style.display = 'none';
+    window.removeEventListener('click', closeOnOutsideClick); // Ensure event listener is removed
+}
+
+
+
+
+
+const downloadButton = document.createElement('button');
+downloadButton.textContent = 'Download';
+downloadButton.classList.add('btn', 'btn-success');
+downloadButton.addEventListener('click', async () => {
+    try {
+        const response = await fetch(`/admin/download/${download.blogId}`);
+        if (!response.ok) {
+            throw new Error('Failed to download blog');
+        }
+        // Handle success response as needed (e.g., initiate download)
+    } catch (error) {
+        console.error('Error downloading blog:', error);
+        alert('Failed to download blog. Please try again later.');
+    }
+});
+
+
+
 
 
  // JavaScript Code for Theme Toggle
@@ -1247,7 +1399,7 @@ body.loading .loader-container {
 
 
     </script>
-    <script src="index.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>
