@@ -10,18 +10,23 @@ const upotp = require("./models/upotp")
 const { checkForAuthenticationCookie } = require("./middlewares/authentication");
 const client = require("./client");
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 const Blog = require('./models/Blog');
 const User = require('./models/user');
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/FileUpload')
-    .then(() => console.log("MongoDB Connected"))
-    .catch((error) => {
-        console.error("MongoDB connection error:", error);
-        process.exit(1); // Exit process with failure
-    });
+
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log("MongoDB Connected"))
+.catch((error) => {
+    console.error("MongoDB connection error:", error);
+    process.exit(1); // Exit process with failure
+});
+
 
 // Middleware and view engine setup
 app.set('view engine', 'ejs');
