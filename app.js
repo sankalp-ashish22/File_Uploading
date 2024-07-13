@@ -2,13 +2,15 @@ require('dotenv').config();
 const path = require("path");
 const express = require('express');
 const mongoose = require("mongoose");
+const axios = require('axios');
+const client = require("./client");
 const cookieParser = require('cookie-parser');
 const userRoute = require('./routes/user');
 const blogRoute = require("./routes/blog");
 const otpRoute = require("./routes/otp");
 const upotp = require(path.join(__dirname, './models/upotp'));
 const { checkForAuthenticationCookie } = require("./middlewares/authentication");
-const client = require("./client");
+
 const app = express();
 const PORT = process.env.PORT || 8000;
 
