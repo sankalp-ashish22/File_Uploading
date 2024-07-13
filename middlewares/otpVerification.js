@@ -1,4 +1,4 @@
-const OTPModel = require('../models/otp');
+const OTPModel = require('../models/Otp');
 
 const verifyOTP = async (req, res, next) => {
     try {

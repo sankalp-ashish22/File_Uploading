@@ -1,8 +1,8 @@
 const { Router } = require('express');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const Otp = require('../models/otp');
-const User = require('../models/user');
+const Otp = require('../models/Otp');
+const User = require('../models/User');
 const Blog = require('../models/Blog');
 const path = require('path');
 const client = require("../client");
