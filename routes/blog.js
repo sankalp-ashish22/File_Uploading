@@ -53,8 +53,9 @@ router.get('/download/:id', checkForAuthenticationCookie('token'), async (req, r
     const { id } = req.params;
     // console.log(id);
     const uuid = crypto.randomUUID();
-    await client.set(id, JSON.stringify(uuid), 'EX', 3000);
+    
     try {
+        await client.set(id, JSON.stringify(uuid), 'EX', 3000);
         const blog = await Blog.findById(id);
         if (!blog) {
             return res.status(404).send('Blog not found');
