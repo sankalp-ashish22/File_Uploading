@@ -1,10 +1,11 @@
 const { Router } = require('express');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const Otp = require('../models/Otp');
-const User = require('../models/User');
-const Blog = require('../models/Blog');
 const path = require('path');
+const Otp = require(path.join(__dirname, '../models/Otp'));
+const User = require(path.join(__dirname, '../models/User'));
+const Blog = require(path.join(__dirname, '../models/Blog'));
+
 const client = require("../client");
 require('dotenv').config();
 

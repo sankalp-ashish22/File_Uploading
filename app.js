@@ -6,14 +6,14 @@ const cookieParser = require('cookie-parser');
 const userRoute = require('./routes/user');
 const blogRoute = require("./routes/blog");
 const otpRoute = require("./routes/otp");
-const upotp = require("./models/upotp")
+const upotp = require(path.join(__dirname, './models/upotp'));
 const { checkForAuthenticationCookie } = require("./middlewares/authentication");
 const client = require("./client");
 const app = express();
 const PORT = process.env.PORT || 8000;
 
 const Blog = require('./models/Blog');
-const User = require('./models/user');
+const User = require('./models/User');
 
 // MongoDB connection
 

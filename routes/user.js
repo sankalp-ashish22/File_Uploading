@@ -1,8 +1,9 @@
 const { Router } = require("express");
-const User = require('../models/user');
+const path = require('path');
+const User = require(path.join(__dirname, '../models/User'));
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const upotp = require('../models/upotp')
+const upotp = require(path.join(__dirname, '../models/upotp'));;
 const { createTokenForUser } = require("../services/authentication");
 const router = Router();
 
