@@ -1,6 +1,6 @@
 const { Redis } = require("ioredis");
 const client = redis.createClient({
-    host: 'redis',  // Use the service name here
+    host: 'redis',  
     port: 6379,
   });
 
